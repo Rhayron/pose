@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# Dados brutos e pesados: NÃO entram no git.
+#
+# Git versiona bem texto e mal binário grande — cada versão de um .bin de
+# 295 MB vira 295 MB permanentes no histórico. Estes arquivos são insumo
+# experimental, não código: pertencem a um armazenamento de dados com
+# manifesto (hash + procedência), como o plano de implementação prevê.
+# ---------------------------------------------------------------------------
+
+# Aquisições de ultrassom (~3,5 GB: 12 x .m2k com RF bruto).
+# Com barra inicial: só a pasta da raiz. Sem ela, o padrão casaria com
+# qualquer pasta "data" em qualquer nível — inclusive a do treino_fiducial,
+# levando junto os pseudo-rótulos, que são pequenos e precisam ser versionados
+# porque definem o conjunto de treino.
+/data/
+
+# Recortes do treino: 5.526 JPEG regeneráveis a partir dos vídeos + labels
+treino_fiducial/data/crops/
+
+# Vídeos de tanque (~580 MB)
+videos/
+
+# Sessões de captura da calibração: PNG 4K, centenas de MB
+calibracao/capturas/
+calibracao/saida_teste/
+calibracao/saida/tabuleiro.png
+
+# Ambientes virtuais e pesos de modelo
+**/.venv/
+*.pt
+*.pth
+*.onnx
+
+# Artigos de terceiros (direitos autorais + peso); o survey em .md fica
+survey/*.pdf
+
+# Saídas regeneráveis
+__pycache__/
+*.pyc
+*.log
+calibracao/ultimo_inicio.log
+build/
+dist/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

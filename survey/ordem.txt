@@ -1,0 +1,69 @@
+GUIA DE LEITURA RECOMENDADA - SURVEY DE ESTIMAÇÃO DE POSE PARA END SUBAQUÁTICO
+
+Esta sequência foi estruturada para construir o conhecimento de forma lógica: começando pelo problema industrial (motivação), passando pela teoria base de visão computacional, inserindo os desafios subaquáticos e, finalmente, chegando às aplicações mais recentes no estado da arte.
+
+Legenda:
+[BAIXADO] = Disponível na pasta papers_survey/
+[ONLINE]  = Necessário baixar pelo link do survey
+
+---
+
+FASE 1: O PROBLEMA INDUSTRIAL E A MOTIVAÇÃO (Contexto NDT & Ultrassom)
+Antes de mergulhar em algoritmos, é essencial entender o porquê estamos tentando rastrear transdutores espacialmente e as limitações do rastreamento mecânico.
+
+1. [BAIXADO] Localisation of Ultrasonic NDT Data Using Hybrid Tracking of Component and Probe (Heil, 2023)
+   -> Por que ler agora: Apresenta exatamente a necessidade de localizar dados acústicos no espaço 3D (para TFM/S-Scan) sem amarras mecânicas rígidas.
+2. [ONLINE] Matrix Probe Offset Calibration for Robotic Arm Scanning (Gomes, 2025)
+   -> Por que ler agora: Contextualiza como a posição espacial afeta matrizes ultrassônicas avançadas e métodos de fusão espacial-acústica.
+
+---
+
+FASE 2: FUNDAMENTOS DE VISÃO COMPUTACIONAL E POSE 6DoF (A Base Teórica)
+Entenda como redes neurais resolvem o problema de estimar posição e rotação antes de colocar a água no meio.
+
+3. [BAIXADO] Reviewing 6D Pose Estimation: Model Strengths, Limitations, and Application Fields (Ordoumpozanis, 2025)
+   -> Por que ler agora: Fornece o panorama completo. O que é 6D pose, quais as diferenças entre métodos diretos e por keypoints.
+4. [BAIXADO] PVNet: Pixel-wise Voting Network for 6DoF Pose Estimation (Peng, 2019)
+   -> Por que ler agora: A base estrutural para a "Estratégia 1" da sua dissertação (Markerless). Ensina como a votação por vetores supera oclusões (fundamental para tubos/braçadeiras).
+5. [BAIXADO] Deep ChArUco: Dark ChArUco Marker Pose Estimation (Hu, 2019)
+   -> Por que ler agora: A base estrutural para a "Estratégia 2" (Marcadores). Mostra como o Deep Learning salva a detecção fiduciária quando falta luz.
+
+---
+
+FASE 3: OS DESAFIOS FÍSICOS DA ÁGUA (Calibração e Imagem Subaquática)
+Como a água distorce, embaça e refrata a luz, quebrando os modelos de câmera convencionais.
+
+6. [BAIXADO] Studies on Underwater Image Processing Using Artificial Intelligence Technologies (2025)
+   -> Por que ler agora: Excelente panorama sobre como clarear e desembaçar a imagem antes de enviá-la para a rede de pose.
+7. [BAIXADO] A Calibration Tool for Refractive Underwater Vision (Seegräber, 2025)
+   -> Por que ler agora: Demonstra matematicamente por que o modelo clássico PnP/Pinhole falha sob a água (múltiplas refrações no acrílico) e como corrigir.
+8. [BAIXADO] Optical Design and Polarization Analysis for Full-Polarization Underwater Imaging Lens (2025)
+   -> Por que ler agora: Uma visão focada no hardware óptico para vencer o "backscatter" (espalhamento da luz).
+9. [BAIXADO] Stereo Vision System for Vision-Based Control of Inspection-Class ROVs (Hożyń, 2021)
+   -> Por que ler agora: Mostra como essas imagens são usadas na prática para guiar veículos de inspeção subaquática.
+
+---
+
+FASE 4: O ESTADO DA ARTE DA POSE 6DoF SUBAQUÁTICA (Onde sua dissertação entra)
+Unindo os fundamentos de CV com os desafios aquáticos para gerar rastreamento robusto.
+
+10. [BAIXADO] Underwater Marker-Based Pose-Estimation With Associated Uncertainty (Risholm, 2021)
+    -> Por que ler agora: Estudo chave do SINTEF que já avaliou ArUcos sob água turva, incluindo cálculo de incerteza da medição.
+11. [BAIXADO] Enhancing Inter-AUV Perception: Adaptive 6-DOF Pose Estimation with Synthetic Images... (Wei, 2024)
+    -> Por que ler agora: Essencial se você for treinar o PVNet para seu transdutor. Mostra como gerar dados sintéticos e traduzi-los para evitar anotações manuais na água.
+12. [BAIXADO] DeepArUco++: Improved detection of square fiducial markers in challenging lighting conditions (Berral-Soler, 2024)
+    -> Por que ler agora: A evolução do Deep ChArUco (mais moderno, resolve problemas de blur/iluminação severa).
+13. [BAIXADO] Active Fiducial Marker-Based Precise Underwater Positioning System for Industrial... (Song, 2026)
+    -> Por que ler agora: Abordagem de hardware (marcadores que emitem luz própria) que você pode querer citar como estado da arte concorrente.
+14. [BAIXADO] Real-Time Millimeter-Accurate Underwater Pose Estimation via Tightly-Coupled Fusion... (Huang, 2025)
+    -> Por que ler agora: Discute a necessidade de precisão milimétrica e altíssima frequência de atualização, o que é crítico para mapear a posição exata de um pulso ultrassônico (TFM).
+
+---
+
+FASE 5: LEITURA COMPLEMENTAR E EXPANSÃO
+15. [BAIXADO] Robust and Fair Undersea Target Detection with Automated Underwater Vehicles... (2022)
+    -> Contexto geral de detecção subaquática e tracking por AUVs.
+16. [BAIXADO] Robust underwater object tracking with image enhancement and two-step feature compression (Li, 2025)
+    -> Estratégia de "image enhancement" conjugada ao tracking para evitar perdas geométricas.
+17. [BAIXADO] Experimental Evaluation of Precision Positioning in Unmanned Aerial Systems Using Fiducial Markers (2026)
+    -> Útil apenas para métricas de avaliação e metodologia de comparação de precisão em fiduciais (transferível para seu cenário de tanque).
