@@ -12,8 +12,13 @@ provas que não usam os dados do ajuste:
      e compara com o |t| da pose. É o único teste que confronta o milímetro
      estimado com um milímetro do mundo.
 
+Os três continuam valendo para um intrínseco IMPORTADO. Na verdade valem mais:
+a prova C é a única que confronta o milímetro estimado com um milímetro do
+mundo, e é ela que pega um erro de escala que a reprojeção sozinha esconde —
+o `solvePnP` absorve fx errado na profundidade sem elevar o resíduo.
+
 Uso:
-    python validar.py --calibracao saida/calibracao_webcam_pc.json \
+    python validar.py --calibracao perfis_ativos/s600.json \
                       --imagens capturas/validacao
     python validar.py ... --distancia-real-mm 600 --imagem-distancia img_0003.png
 """
@@ -35,6 +40,51 @@ from nucleo import (
     escala_efetiva,
     novo_detector,
 )
+
+
+def carregar_intrinsecos(caminho: Path):
+    """Lê K, distorção e resolução de um perfil ativo ou de um JSON plano.
+
+    Dois formatos são aceitos porque têm garantias diferentes, e a diferença
+    precisa aparecer na tela em vez de ficar implícita:
+
+      * perfil ativo selado (`pose.active_external_camera_intrinsics`) — tem
+        selo SHA-256 conferido na leitura e estado de transferência;
+      * JSON plano com `K`, `dist` e `resolucao` — sem selo. Aceito para
+        inspeção pontual, nunca é tratado como equivalente.
+    """
+    raw = json.loads(caminho.read_text(encoding="utf-8"))
+    nome = raw.get("schema", {}).get("name") if isinstance(raw.get("schema"), dict) else None
+
+    if nome == "pose.active_external_camera_intrinsics":
+        from caliscope_import import carregar_perfil_ativo
+
+        # exigir_transferencia=False de propósito: validar.py é uma das provas
+        # que decidem se a transferência vale, então não pode depender dela.
+        dados = carregar_perfil_ativo(caminho, exigir_transferencia=False)
+        estado = dados["transferencia"]["status"]
+        origem = (
+            f"perfil selado {dados['camera_key']} "
+            f"{dados['image_size'][0]}x{dados['image_size'][1]}, "
+            f"activation_id={dados['activation_id'][:12]}, transferência={estado}"
+        )
+        return (
+            np.array(dados["K"], np.float64),
+            np.array(dados["dist"], np.float64).reshape(1, -1),
+            tuple(dados["image_size"]),
+            origem,
+        )
+
+    if not {"K", "dist", "resolucao"} <= set(raw):
+        raise SystemExit(
+            f"{caminho} não é perfil ativo nem JSON plano com K/dist/resolucao"
+        )
+    return (
+        np.array(raw["K"], np.float64),
+        np.array(raw["dist"], np.float64).reshape(1, -1),
+        tuple(raw["resolucao"]),
+        f"JSON plano SEM selo: {caminho.name}",
+    )
 
 
 def retidao(cantos_ids, cantos_px, K, dist, squares_x):
@@ -70,10 +120,8 @@ def main():
                     help="nome do arquivo onde essa distância foi medida")
     args = ap.parse_args()
 
-    calib = json.loads(Path(args.calibracao).read_text(encoding="utf-8"))
-    K = np.array(calib["K"], np.float64)
-    dist = np.array(calib["dist"], np.float64).reshape(1, -1)
-    resolucao = tuple(calib["resolucao"])
+    K, dist, resolucao, origem = carregar_intrinsecos(Path(args.calibracao))
+    print(f"[..] intrínsecos: {origem}")
 
     cfg = ConfigTabuleiro.carregar(Path(args.tabuleiro))
     quadrado, marcador, _ = escala_efetiva(cfg, permitir_nominal=True)

@@ -1,0 +1,591 @@
+{
+  "cameras": {
+    "c270": {
+      "binding": {
+        "binding_method": "stable_pnp_id_and_exact_friendly_name",
+        "dshow_index": 0,
+        "dshow_name": "Logi C270 HD WebCam",
+        "friendly_name": "Logi C270 HD WebCam",
+        "pnp_class": "Camera",
+        "present": true,
+        "stable_id": "USB\\VID_046D&PID_0825&MI_00\\8&1DFDC9A7&0&0000",
+        "status": "OK"
+      },
+      "effective_mode": {
+        "backend": "DSHOW",
+        "codec": "MJPEG",
+        "fps": 30.00003000003,
+        "height": 960,
+        "set_results": {
+          "buffer_size": false,
+          "codec": true,
+          "fps": true,
+          "height": true,
+          "width": true
+        },
+        "width": 1280
+      },
+      "gate": {
+        "criteria": {
+          "capture_errors": true,
+          "exact_mode": true,
+          "frames_received": true,
+          "maximum_repeat_ratio": true,
+          "minimum_unique_fps": true,
+          "minimum_window": true
+        },
+        "issues": [],
+        "passed": true
+      },
+      "metrics": {
+        "estimated_source_drops": 3,
+        "frames_received": 298,
+        "interval_mean_ms": 33.72432828282828,
+        "interval_p95_ms": 48.047940000000004,
+        "jitter_rms_ms": 6.089839870852621,
+        "observed_fps": 29.745695959998468,
+        "repeat_ratio": 0.0,
+        "repeated_frames": 0,
+        "unique_fps": 29.745695959998468,
+        "unique_frames": 298,
+        "window_seconds": 10.0182561
+      },
+      "mode_check": {
+        "issues": [],
+        "passed": true
+      },
+      "ring": {
+        "capacity": 8,
+        "overwrites": 290
+      },
+      "source_diagnostics": {
+        "controls": {
+          "baseline": {
+            "auto_exposure": -1.0,
+            "autofocus": -1.0,
+            "exposure": -6.0,
+            "focus": -1.0,
+            "gain": 192.0,
+            "mode": {
+              "backend": "DSHOW",
+              "codec": "MJPG",
+              "fps": 30.00003000003,
+              "height": 960,
+              "width": 1280
+            }
+          },
+          "baseline_observability": {
+            "auto_exposure": false,
+            "autofocus": false,
+            "exposure": true,
+            "focus": false,
+            "gain": true
+          }
+        },
+        "negotiation_attempts": [
+          {
+            "accepted": true,
+            "initial_readback": {
+              "backend": "DSHOW",
+              "codec": "YUY2",
+              "fps": 0.0,
+              "height": 480,
+              "width": 640
+            },
+            "issues": [],
+            "opened": true,
+            "probe_frame": {
+              "ok": true,
+              "readback": {
+                "backend": "DSHOW",
+                "codec": "MJPG",
+                "fps": 30.00003000003,
+                "height": 960,
+                "width": 1280
+              },
+              "shape": [
+                960,
+                1280,
+                3
+              ]
+            },
+            "property_order": [
+              "buffer_size",
+              "width",
+              "height",
+              "fps",
+              "codec"
+            ],
+            "steps": [
+              {
+                "property": "buffer_size",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 0.0,
+                  "height": 480,
+                  "width": 640
+                },
+                "requested": 1,
+                "set_returned": false
+              },
+              {
+                "property": "width",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 0.0,
+                  "height": 480,
+                  "width": 640
+                },
+                "requested": 1280,
+                "set_returned": true
+              },
+              {
+                "property": "height",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 0.0,
+                  "height": 960,
+                  "width": 1280
+                },
+                "requested": 960,
+                "set_returned": true
+              },
+              {
+                "property": "fps",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 30.00003000003,
+                  "height": 960,
+                  "width": 1280
+                },
+                "requested": 30.0,
+                "set_returned": true
+              },
+              {
+                "property": "codec",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "MJPG",
+                  "fps": 30.00003000003,
+                  "height": 960,
+                  "width": 1280
+                },
+                "requested": "MJPEG",
+                "set_returned": true
+              }
+            ],
+            "strategy": "size_rate_then_codec"
+          }
+        ],
+        "validation_readbacks": [
+          {
+            "backend": "DSHOW",
+            "codec": "MJPG",
+            "fps": 30.00003000003,
+            "height": 960,
+            "width": 1280
+          }
+        ]
+      },
+      "spec": {
+        "device_name_hint": "C270",
+        "display_name": "Logitech C270",
+        "key": "c270",
+        "maximum_repeat_ratio": 0.02,
+        "minimum_gate_seconds": 10.0,
+        "minimum_unique_fps": 27.0,
+        "mode": {
+          "codec": "MJPEG",
+          "fps": 30.0,
+          "height": 960,
+          "width": 1280
+        }
+      }
+    },
+    "s600": {
+      "binding": {
+        "binding_method": "stable_pnp_id_and_exact_friendly_name",
+        "dshow_index": 1,
+        "dshow_name": "EMEET SmartCam S600",
+        "friendly_name": "EMEET SmartCam S600",
+        "pnp_class": "Camera",
+        "present": true,
+        "stable_id": "USB\\VID_328F&PID_00AD&MI_00\\7&22EA2E16&0&0000",
+        "status": "OK"
+      },
+      "effective_mode": {
+        "backend": "DSHOW",
+        "codec": "MJPEG",
+        "fps": 60.000240000960005,
+        "height": 1080,
+        "set_results": {
+          "buffer_size": false,
+          "codec": true,
+          "fps": true,
+          "height": true,
+          "width": true
+        },
+        "width": 1920
+      },
+      "gate": {
+        "criteria": {
+          "capture_errors": true,
+          "exact_mode": true,
+          "frames_received": true,
+          "maximum_repeat_ratio": true,
+          "minimum_unique_fps": true,
+          "minimum_window": true
+        },
+        "issues": [],
+        "passed": true
+      },
+      "metrics": {
+        "estimated_source_drops": 0,
+        "frames_received": 603,
+        "interval_mean_ms": 16.614186378737543,
+        "interval_p95_ms": 16.873364999999996,
+        "jitter_rms_ms": 3.255768657327623,
+        "observed_fps": 60.19011632174186,
+        "repeat_ratio": 0.0,
+        "repeated_frames": 0,
+        "unique_fps": 60.19011632174186,
+        "unique_frames": 603,
+        "window_seconds": 10.0182561
+      },
+      "mode_check": {
+        "issues": [],
+        "passed": true
+      },
+      "ring": {
+        "capacity": 8,
+        "overwrites": 595
+      },
+      "source_diagnostics": {
+        "controls": {
+          "baseline": {
+            "auto_exposure": -1.0,
+            "autofocus": 1.0,
+            "exposure": -5.0,
+            "focus": 200.0,
+            "gain": 0.0,
+            "mode": {
+              "backend": "DSHOW",
+              "codec": "MJPG",
+              "fps": 60.000240000960005,
+              "height": 1080,
+              "width": 1920
+            }
+          },
+          "baseline_observability": {
+            "auto_exposure": false,
+            "autofocus": true,
+            "exposure": true,
+            "focus": true,
+            "gain": true
+          },
+          "override": {
+            "autofocus_readback_interpretation": null,
+            "final": {
+              "auto_exposure": -1.0,
+              "autofocus": 1.0,
+              "exposure": -6.0,
+              "focus": 243.0,
+              "gain": 0.0,
+              "mode": {
+                "backend": "DSHOW",
+                "codec": "MJPG",
+                "fps": 60.000240000960005,
+                "height": 1080,
+                "width": 1920
+              }
+            },
+            "requested": {
+              "disable_autofocus": false,
+              "exposure": -6.0,
+              "focus": null,
+              "manual_auto_exposure_value": 0.25
+            },
+            "steps": [
+              {
+                "property": "auto_exposure_manual",
+                "readback": {
+                  "auto_exposure": -1.0,
+                  "autofocus": 1.0,
+                  "exposure": -5.0,
+                  "focus": 254.0,
+                  "gain": 0.0,
+                  "mode": {
+                    "backend": "DSHOW",
+                    "codec": "MJPG",
+                    "fps": 60.000240000960005,
+                    "height": 1080,
+                    "width": 1920
+                  }
+                },
+                "requested": 0.25,
+                "set_returned": true
+              },
+              {
+                "property": "exposure",
+                "readback": {
+                  "auto_exposure": -1.0,
+                  "autofocus": 1.0,
+                  "exposure": -6.0,
+                  "focus": 243.0,
+                  "gain": 0.0,
+                  "mode": {
+                    "backend": "DSHOW",
+                    "codec": "MJPG",
+                    "fps": 60.000240000960005,
+                    "height": 1080,
+                    "width": 1920
+                  }
+                },
+                "requested": -6.0,
+                "set_returned": true
+              }
+            ],
+            "verified_by_autofocus_readback": true,
+            "verified_by_exposure_readback": true,
+            "verified_by_focus_readback": true
+          },
+          "restore": {
+            "attempted": true,
+            "complete": false,
+            "final": {
+              "auto_exposure": -1.0,
+              "autofocus": 1.0,
+              "exposure": -5.0,
+              "focus": 281.0,
+              "gain": 0.0,
+              "mode": {
+                "backend": "DSHOW",
+                "codec": "MJPG",
+                "fps": 60.000240000960005,
+                "height": 1080,
+                "width": 1920
+              }
+            },
+            "issues": [
+              "auto_exposure: baseline nao observavel; valor anterior nao restaurado"
+            ],
+            "order": [
+              "exposure"
+            ],
+            "properties": {
+              "auto_exposure": {
+                "attempted": false,
+                "baseline": -1.0,
+                "baseline_observable": false,
+                "readback_verified": null,
+                "reason": "baseline nao observavel no readback",
+                "set_returned": null
+              },
+              "autofocus": {
+                "attempted": false,
+                "baseline": 1.0,
+                "baseline_observable": true,
+                "readback_verified": null,
+                "reason": "nao alterado pelo override",
+                "set_returned": null
+              },
+              "exposure": {
+                "attempted": true,
+                "baseline": -5.0,
+                "baseline_observable": true,
+                "readback_verified": true,
+                "reason": null,
+                "set_returned": true
+              },
+              "focus": {
+                "attempted": false,
+                "baseline": 178.0,
+                "baseline_observable": true,
+                "readback_verified": null,
+                "reason": "nao alterado pelo override",
+                "set_returned": null
+              }
+            },
+            "steps": [
+              {
+                "property": "exposure_baseline",
+                "readback": {
+                  "auto_exposure": -1.0,
+                  "autofocus": 1.0,
+                  "exposure": -5.0,
+                  "focus": 281.0,
+                  "gain": 0.0,
+                  "mode": {
+                    "backend": "DSHOW",
+                    "codec": "MJPG",
+                    "fps": 60.000240000960005,
+                    "height": 1080,
+                    "width": 1920
+                  }
+                },
+                "requested": -5.0,
+                "set_returned": true
+              }
+            ]
+          }
+        },
+        "negotiation_attempts": [
+          {
+            "accepted": true,
+            "initial_readback": {
+              "backend": "DSHOW",
+              "codec": "YUY2",
+              "fps": 0.0,
+              "height": 480,
+              "width": 640
+            },
+            "issues": [],
+            "opened": true,
+            "probe_frame": {
+              "ok": true,
+              "readback": {
+                "backend": "DSHOW",
+                "codec": "MJPG",
+                "fps": 60.000240000960005,
+                "height": 1080,
+                "width": 1920
+              },
+              "shape": [
+                1080,
+                1920,
+                3
+              ]
+            },
+            "property_order": [
+              "buffer_size",
+              "width",
+              "height",
+              "fps",
+              "codec"
+            ],
+            "steps": [
+              {
+                "property": "buffer_size",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 0.0,
+                  "height": 480,
+                  "width": 640
+                },
+                "requested": 1,
+                "set_returned": false
+              },
+              {
+                "property": "width",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "YUY2",
+                  "fps": 0.0,
+                  "height": 480,
+                  "width": 640
+                },
+                "requested": 1920,
+                "set_returned": true
+              },
+              {
+                "property": "height",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "MJPG",
+                  "fps": 0.0,
+                  "height": 1080,
+                  "width": 1920
+                },
+                "requested": 1080,
+                "set_returned": true
+              },
+              {
+                "property": "fps",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "MJPG",
+                  "fps": 60.000240000960005,
+                  "height": 1080,
+                  "width": 1920
+                },
+                "requested": 60.0,
+                "set_returned": true
+              },
+              {
+                "property": "codec",
+                "readback": {
+                  "backend": "DSHOW",
+                  "codec": "MJPG",
+                  "fps": 60.000240000960005,
+                  "height": 1080,
+                  "width": 1920
+                },
+                "requested": "MJPEG",
+                "set_returned": true
+              }
+            ],
+            "strategy": "size_rate_then_codec"
+          }
+        ],
+        "validation_readbacks": [
+          {
+            "backend": "DSHOW",
+            "codec": "MJPG",
+            "fps": 60.000240000960005,
+            "height": 1080,
+            "width": 1920
+          }
+        ]
+      },
+      "spec": {
+        "device_name_hint": "S600",
+        "display_name": "EMEET S600",
+        "key": "s600",
+        "maximum_repeat_ratio": 0.02,
+        "minimum_gate_seconds": 10.0,
+        "minimum_unique_fps": 55.0,
+        "mode": {
+          "codec": "MJPEG",
+          "fps": 60.0,
+          "height": 1080,
+          "width": 1920
+        }
+      }
+    }
+  },
+  "capture": {
+    "concurrent_streams": 2,
+    "ended_monotonic_ns": 17442474150500,
+    "started_monotonic_ns": 17432455894400,
+    "window_seconds": 10.0182561
+  },
+  "enumerated_devices": [
+    {
+      "friendly_name": "Logi C270 HD WebCam",
+      "pnp_class": "Camera",
+      "present": true,
+      "stable_id": "USB\\VID_046D&PID_0825&MI_00\\8&1DFDC9A7&0&0000",
+      "status": "OK"
+    },
+    {
+      "friendly_name": "EMEET SmartCam S600",
+      "pnp_class": "Camera",
+      "present": true,
+      "stable_id": "USB\\VID_328F&PID_00AD&MI_00\\7&22EA2E16&0&0000",
+      "status": "OK"
+    }
+  ],
+  "generated_at_utc": "2026-08-05T17:35:40.751347+00:00",
+  "hardware_capture_executed": true,
+  "host": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.15"
+  },
+  "passed": true,
+  "schema_version": 1
+}

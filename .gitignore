@@ -20,10 +20,24 @@ treino_fiducial/data/crops/
 # Vídeos de tanque (~580 MB)
 videos/
 
-# Sessões de captura da calibração: PNG 4K, centenas de MB
+# Sessões de captura da calibração: PNG grandes, centenas de MB.
+# As vistas da validação de transferência são insumo, não código — o que
+# precisa ficar versionado é o relatório em rig/transferencia.json, que já
+# carrega os hashes e as métricas por vista.
 calibracao/capturas/
+calibracao/capturas_validacao/
 calibracao/saida_teste/
 calibracao/saida/tabuleiro.png
+
+# Backups automáticos do importador (o arquivo vivo fica versionado)
+*.bak
+
+# Sessões de aquisição: vídeo bruto, centenas de MB por sessão.
+# Os metadados (sessao_*.json) são pequenos e carregam hash, carimbos e
+# proveniência — esses precisam ficar versionados, o vídeo não.
+aquisicao/sessoes/*/*.avi
+aquisicao/sessoes/*/*.mp4
+aquisicao/latencia.json
 
 # Ambientes virtuais e pesos de modelo
 **/.venv/
