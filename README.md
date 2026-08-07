@@ -7,6 +7,10 @@ Pesquisa de mestrado. O delineamento completo, com hipóteses, protocolo
 experimental e métricas, está em [`delineamento_pesquisa_mestrado.md`](delineamento_pesquisa_mestrado.md);
 o plano de execução em [`plano_implementacao.md`](plano_implementacao.md).
 
+**Retomando o trabalho? Comece por [`HANDOFF.md`](HANDOFF.md)** — estado por
+frente, artefatos canônicos com hash, decisões em aberto e a sequência de
+retomada em ordem de dependência.
+
 ## Onde o trabalho está
 
 | Frente | Estado |
