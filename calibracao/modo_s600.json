@@ -1,0 +1,34 @@
+{
+  "schema": {"name": "pose.camera_experiment_mode", "version": 3},
+  "decisao": {
+    "em": "2026-09-01",
+    "modo": "3840x2160@30 MJPEG",
+    "motivo": "Intrínseca medida nesta bancada (Caliscope 0.11.3, RMSE 0,599 px). Não misturar com outro K."
+  },
+  "camera": {
+    "key": "s600",
+    "friendly_name": "EMEET SmartCam S600",
+    "stable_id": "USB\\VID_328F&PID_00AD&MI_00\\7&22EA2E16&0&0000"
+  },
+  "mode": {
+    "width": 3840,
+    "height": 2160,
+    "fps": 30,
+    "codec": "MJPG",
+    "backend": "dshow"
+  },
+  "acquisition": {
+    "exposure": -3,
+    "autofocus": 0,
+    "nota": "Exposição não muda K. Foco e FOV mudam. Autofoco off; não mexer no zoom/FOV 40–73°. O driver pode ignorar CAP_PROP_AUTOFOCUS=0 — confira o readback."
+  },
+  "captura_intrinseca": {
+    "ferramenta": "ffmpeg",
+    "comando": "calibracao/gravar_ffmpeg_s600.cmd",
+    "skellycam_4k": "inviavel: fila BGR 3840x2160 estoura RAM"
+  },
+  "campanha": {
+    "ferramenta": "aquisicao/gravar.py",
+    "sync": "grosseira (clique no START do Multi2000)"
+  }
+}

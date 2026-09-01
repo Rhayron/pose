@@ -3,7 +3,7 @@
 Três decisões de projeto que existem por razão medível:
 
 **A câmera captura continuamente, desde o READY.** Abrir uma webcam USB custa
-centenas de milissegundos imprevisíveis — negociação DirectShow, primeiros
+centenas de milissegundos imprevisíveis: negociação DirectShow, primeiros
 quadros já velhos no buffer do driver, autoexposição assentando. Se a captura
 começasse no instante do clique, toda essa latência entraria no sincronismo sem
 ser medida. Capturando desde antes, o clique só marca um instante em um fluxo
@@ -17,7 +17,7 @@ decodificação no tempo do quadro.
 **O buffer interno é reduzido a 1.** Por padrão o DirectShow enfileira quadros;
 com fila, `grab()` devolve um quadro antigo e o carimbo fica atrasado de um
 valor que depende de quão atrás o consumidor está. Com buffer 1 o quadro é
-sempre o mais recente. Nem todo driver obedece — por isso o pedido e a leitura
+sempre o mais recente. Nem todo driver obedece, por isso o pedido e a leitura
 de volta ficam registrados.
 
 Nada aqui converte quadro em milímetro. Isso é do `calibracao/`.
@@ -35,7 +35,7 @@ import cv2
 import numpy as np
 
 # Modo físico do perfil calibrado. Mudar qualquer um destes invalida K.
-MODO_PADRAO = {"width": 1920, "height": 1080, "fps": 60.0, "codec": "MJPG"}
+MODO_PADRAO = {"width": 3840, "height": 2160, "fps": 30.0, "codec": "MJPG"}
 
 # Propriedades cujo valor precisa ficar constante durante a sessão. Foco muda a
 # geometria; exposição e ganho mudam brilho e ruído. Todas são amostradas
@@ -138,7 +138,7 @@ class FonteCamera:
 
         self.props_antes = self._ler_props()
 
-        # A ordem importa: codec antes da resolução. Pedir 1920x1080 com o codec
+        # A ordem importa: codec antes da resolução. Pedir 3840x2160 com o codec
         # ainda em YUY2 pode ser recusado por falta de banda USB e o driver cai
         # silenciosamente para uma resolução menor.
         fourcc = cv2.VideoWriter_fourcc(*str(self.modo["codec"]))
@@ -353,14 +353,14 @@ class FonteCamera:
         """Compara o foco desta sessão com o foco da calibração.
 
         Foco é a única propriedade da câmera que muda a geometria. Um K medido
-        com foco 243 não descreve a mesma câmera com foco 280 — e nada na
+        com foco 243 não descreve a mesma câmera com foco 280, e nada na
         imagem denuncia isso: os quadros saem nítidos, a detecção funciona, e o
         erro entra silenciosamente na escala.
 
         Não existe tolerância defensável aqui. As unidades de foco do
         DirectShow são arbitrárias e este projeto nunca mediu quanto K muda por
         unidade. Então qualquer diferença é relatada com a magnitude, e a
-        decisão fica com quem lê — o teste que de fato responde à pergunta é
+        decisão fica com quem lê. O teste que de fato responde à pergunta é
         `validar_transferencia.py` rodado NESTE foco.
         """
         observados = sorted({
@@ -401,7 +401,7 @@ class FonteCamera:
         if not estavel and len(observados) > 1:
             alertas.append(
                 f"o foco variou durante a sessão: {observados}. Um único K não "
-                "descreve a sessão inteira — provavelmente o autofoco continuou "
+                "descreve a sessão inteira. Provavelmente o autofoco continuou "
                 "ativo apesar do pedido de manual."
             )
         if atual is None:

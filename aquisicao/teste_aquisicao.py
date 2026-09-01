@@ -57,7 +57,7 @@ def fluxo_sintetico(
     """Gera a tabela de quadros que a Gravacao produziria.
 
     `fracao` é a parte da janela de exposição do quadro de transição em que a
-    luz já estava acesa — é o valor que a interpolação deve recuperar.
+    luz já estava acesa. É o valor que a interpolação deve recuperar.
     """
     periodo_ns = int(1e9 / fps)
     quadros: list[dict] = []
@@ -137,28 +137,28 @@ def teste_qualidade() -> None:
     print("\n5. Qualidade do sincronismo é declarada corretamente")
 
     q = _qualidade_sincronismo({"detectado": False}, None, None)
-    checar(q["nivel"] == "ausente", "sem evento e sem clique → ausente")
+    checar(q["nivel"] == "ausente", "sem evento e sem clique -> ausente")
 
     q = _qualidade_sincronismo({"detectado": False}, {"monotonic_ns": 1}, None)
-    checar(q["nivel"] == "grosseira", "só clique → grosseira")
+    checar(q["nivel"] == "grosseira", "só clique -> grosseira")
     checar("NÃO" in q["base"], "  e o texto diz explicitamente o que não serve")
     checar("aviso_latencia" in q, "  avisa que a latência não foi medida")
 
     q = _qualidade_sincronismo(
         {"detectado": True, "interpolado": False, "incerteza_ms_estimada": 16.7},
         {"monotonic_ns": 1}, 42.0)
-    checar(q["nivel"] == "um_quadro", "evento sem interpolação → um_quadro")
+    checar(q["nivel"] == "um_quadro", "evento sem interpolação -> um_quadro")
     checar(q["latencia_pipeline_compensada"], "  registra que a latência foi informada")
 
     q = _qualidade_sincronismo(
         {"detectado": True, "interpolado": True, "incerteza_ms_estimada": 1.7},
         {"monotonic_ns": 1}, 42.0)
-    checar(q["nivel"] == "fina", "evento interpolado → fina")
+    checar(q["nivel"] == "fina", "evento interpolado -> fina")
     checar(q["incerteza_ms_estimada"] < 5.0, "  com incerteza na casa do milissegundo")
 
 
 def teste_correspondencia_e_perdas() -> None:
-    print("\n6. Correspondência índice↔carimbo e contagem de perdas")
+    print("\n6. Correspondência índice<->carimbo e contagem de perdas")
 
     # A tabela é a fonte da verdade: descartar por fila remove o registro junto.
     quadros = fluxo_sintetico(n=50)
@@ -197,7 +197,7 @@ def teste_correspondencia_e_perdas() -> None:
 
 
 def teste_verificacao_de_foco() -> None:
-    """Foco é a única propriedade que muda a geometria — o guarda tem de pegar."""
+    """Foco é a única propriedade que muda a geometria. O guarda tem de pegar."""
     print("\n8. Foco conferido contra o da calibração")
     from camera import FonteCamera  # noqa: PLC0415
 
@@ -210,7 +210,7 @@ def teste_verificacao_de_foco() -> None:
 
     v = montar(243.0, 243.0, [243.0, 243.0, 243.0])
     checar(v["confere"] and not v["alertas"],
-           "foco igual ao da calibração e estável → sem alerta")
+           "foco igual ao da calibração e estável -> sem alerta")
 
     v = montar(243.0, 280.0, [280.0, 280.0])
     checar(not v["confere"], "foco diferente é reprovado")

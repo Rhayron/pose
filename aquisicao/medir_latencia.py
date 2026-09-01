@@ -1,4 +1,4 @@
-"""Mede a latência do pipeline da câmera — de sensor a quadro entregue.
+"""Mede a latência do pipeline da câmera, do sensor ao quadro entregue.
 
 O problema
 ----------
@@ -10,7 +10,7 @@ quadro está "atrasado" pelo mesmo valor.
 Se o único evento de referência fosse o próprio vídeo, o atraso cancelaria e
 não importaria. Mas o marcador de clique vem do relógio do sistema operacional,
 sem esse atraso. Comparar os dois sem compensar introduz um viés constante de
-uma latência inteira — direto na associação pose↔ultrassom.
+uma latência inteira, direto na associação pose↔ultrassom.
 
 O método
 --------
@@ -27,7 +27,7 @@ e é o número certo para corrigir um evento gerado na tela.
 O piscar é repetido N vezes com intervalos aleatórios. Intervalo fixo poderia
 entrar em batimento com o período de quadro e enviesar sempre para o mesmo
 lado; aleatório distribui a fase uniformemente. Relata-se a distribuição
-inteira, não só a média — se o P90 estiver muito acima da mediana, a latência
+inteira, não só a média. Se o P90 estiver muito acima da mediana, a latência
 não é constante e compensar por um número só seria enganoso.
 
 Uso
@@ -158,7 +158,7 @@ def resumir(eventos: list[dict[str, Any]], periodo_ms: float | None) -> dict[str
     else:
         interpretacao.append(
             f"dispersão de {dispersao:.1f} ms excede um período de quadro "
-            f"({periodo_ms:.1f} ms) se houver. A latência NÃO é constante — "
+            f"({periodo_ms:.1f} ms) se houver. A latência NÃO é constante: "
             "compensar por um único número introduziria erro variável. "
             "Investigue carga de CPU, USB compartilhado ou buffer do driver."
         )
@@ -206,7 +206,7 @@ def main(argv: list[str] | None = None) -> int:
     time.sleep(2.0)  # deixar a autoexposição assentar antes de medir
 
     root = tk.Tk()
-    root.title("medindo latência — não cubra esta janela")
+    root.title("Medindo latência: não cubra esta janela")
     root.attributes("-fullscreen", True)
     tela = tk.Canvas(root, background="black", highlightthickness=0)
     tela.pack(fill="both", expand=True)

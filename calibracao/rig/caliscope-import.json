@@ -9,55 +9,45 @@
       "version": "0.11.3"
     },
     "origem": {
-      "projeto": "C:\\Users\\Rhayron\\Projects\\vrchat",
-      "capture_volume": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\extrinsic\\capture_volume",
-      "import_id_original": "319abd4e63e22ae548c2ac61",
-      "profile_id_original": "cf6493a42c5d3a1de4004e4a",
-      "calibrado_em": "2026-08-05",
-      "operador_declarou": "mesma camera fisica; verificada por stable_id USB\\VID_328F&PID_00AD"
+      "projeto": "C:\\Users\\Rhayron\\Projects\\pose",
+      "workspace": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\caliscope-workspace",
+      "calibrado_em": "2026-09-01",
+      "operador_declarou": "S600 3840x2160@30 MJPEG; tabuleiro contrato 34.0 mm; Caliscope Autocalibrate cam_0",
+      "transferencia_status": "validada",
+      "transferencia_motivo": "K medido nesta bancada pelo Caliscope 0.11.3 em 2026-09-01 (3840x2160).",
+      "transferencia_evidencia": {
+        "rmse_px": 0.5988605967600696,
+        "frames_used": 30,
+        "coverage_fraction": 1.0
+      }
     },
     "source_units": "meters",
     "file_manifest": {
       "board_contract": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/saida/tabuleiro.json",
+        "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\saida\\tabuleiro.json",
         "sha256": "f82d8fbb06bbd28d9c0087a3e75c84926b90daeffa83117a16214c473dcfec3a",
         "size_bytes": 258
       },
       "camera_array": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/camera_array.toml",
-        "sha256": "51805d3773b4b3bb6ccf8426b279da607f8398256647f4a3c8e6bd0ca470c4db",
-        "size_bytes": 1071
+        "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\origem_caliscope\\camera_array.toml",
+        "sha256": "82fb74e187196d067d5f68591eb6a8b2bbcb9b6ce81708f14b7d8b45245ca5f3",
+        "size_bytes": 458
       },
       "charuco_toml": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/intrinsic_charuco.toml",
-        "sha256": "5eb2297662a6a276aa95bfd5b353fd8650a1746f32ef18a0e5a762e1fc4ece03",
-        "size_bytes": 222
-      },
-      "gate_report": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/gate_s600.json",
-        "sha256": "ff1194d99c1a2ba002271c41f52123f4eceec17297cf171df12ddca9e277702a",
-        "size_bytes": 17491
-      },
-      "image_points": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/image_points.csv",
-        "sha256": "8c4dc2a9b9d28b6dad9719f0e759539c55a3f5fddead48b9cb078be41707ba69",
-        "size_bytes": 152666
+        "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\origem_caliscope\\intrinsic_charuco.toml",
+        "sha256": "646b340dc156cd965b59bda035d8a88d8b40f11e433747aa912ea2a1e99863e7",
+        "size_bytes": 235
       },
       "intrinsic_report": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/intrinsic_report_s600.toml",
-        "sha256": "7ba4f61326b4f8adec7936ccb6f7c0eab23416a05050f88b9a01d2c5416e5c12",
-        "size_bytes": 378
-      },
-      "world_points": {
-        "path": "/sessions/determined-magical-turing/mnt/pose/calibracao/origem_caliscope/world_points.csv",
-        "sha256": "b652f2913ffc9d982b460c698568aeb74e24e55709be54de66a8a24b8fc07cb3",
-        "size_bytes": 49877
+        "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\origem_caliscope\\intrinsic_report_s600.toml",
+        "sha256": "e93ef6395b4304ba2d25170dcae223ae12c862cfe07007e5b9523df4239549a9",
+        "size_bytes": 384
       }
     },
-    "source_identity_sha256": "0cd13ba484d1f15edac21c310017c1da18d5c1292f0b99809666de305f51e15b"
+    "source_identity_sha256": "dd1afc01598efccc00b9f874ec0f71a430a8b8be3baaa7f50285e0431819ba2e"
   },
   "camera_key": "s600",
-  "cam_id": 1,
+  "cam_id": 0,
   "profile": {
     "schema": {
       "name": "pose.external_camera_intrinsics",
@@ -65,58 +55,18 @@
     },
     "camera": {
       "key": "s600",
-      "binding": {
-        "stable_id": "USB\\VID_328F&PID_00AD&MI_00\\7&22EA2E16&0&0000",
-        "friendly_name": "EMEET SmartCam S600",
-        "binding_method": "stable_pnp_id_and_exact_friendly_name"
-      },
-      "mode": {
-        "width": 1920,
-        "height": 1080,
-        "fps": 60.000240000960005,
-        "codec": "MJPEG",
-        "backend": "DSHOW"
-      },
+      "binding": null,
+      "mode": null,
       "rotation_degrees": 0,
-      "controls": {
-        "focus": {
-          "value": 243.0,
-          "observavel": true,
-          "policy": "gate_readback",
-          "travado_durante_o_gate": false,
-          "valores_observados": [
-            200.0,
-            243.0,
-            254.0,
-            281.0
-          ],
-          "geometria": "foco altera K; divergencia invalida a transferencia"
-        },
-        "autofocus": {
-          "value": 1.0,
-          "observavel": true,
-          "geometria": "autofoco ligado faz K variar com a distancia da cena"
-        },
-        "exposure": {
-          "value": -6.0,
-          "observavel": true,
-          "policy": "gate_readback",
-          "geometria": "exposicao nao altera K; so brilho e ruido"
-        }
-      },
+      "controls": null,
       "acquisition": {
         "kind": "caliscope_geometric_capture",
         "runtime_binding": "none",
         "exposure": -3.0,
         "videos": {
-          "extrinsic": {
-            "path": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\extrinsic\\cam_1.mp4",
-            "sha256": "ca35e8d0763bdd01f923a86ae992f80e00d7b261f9e04a561f63f04d45ad4be9",
-            "verificado": false
-          },
           "intrinsic": {
-            "path": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\intrinsic\\cam_1.mp4",
-            "sha256": "236e0448a4a5e2a3a2ed951d520a163c23f22d96bb25e7e5fa7fd907b6295255",
+            "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\caliscope-workspace\\calibration\\intrinsic\\cam_0.mp4",
+            "sha256": "d62b6f6500c299109ca2d814a21e8df30991daa52690ff42eb0d90e1bab0cfe3",
             "verificado": false
           }
         },
@@ -131,7 +81,7 @@
         "square_size_cm": 3.4,
         "aruco_scale": 0.7485714285714286,
         "legacy_pattern": false,
-        "units": "cm"
+        "units": "inch"
       },
       "contract": {
         "dicionario": "DICT_4X4_50",
@@ -148,19 +98,19 @@
     },
     "intrinsics": {
       "image_size": [
-        1920,
-        1080
+        3840,
+        2160
       ],
       "K": [
         [
-          1495.7420106987456,
+          3119.7653658554414,
           0.0,
-          906.2054519109751
+          1898.9289090289108
         ],
         [
           0.0,
-          1494.7817457264268,
-          427.86865854696316
+          3121.6558995750993,
+          898.6103390118336
         ],
         [
           0.0,
@@ -170,13 +120,13 @@
       ],
       "distortion_model": "k1k2k3_tang",
       "distortion_coefficients": [
-        0.10438699268935486,
-        -0.4501545107484559,
-        -0.006714404804705018,
-        -0.004781635798769895,
-        0.43789766667164065
+        0.1377737976423014,
+        -0.48117520235499106,
+        0.00302856287266917,
+        -0.0025003722277974244,
+        0.46868806675805835
       ],
-      "valido_somente_para": "camera s600 em 1920x1080, com o mesmo foco e o mesmo campo de visao da aquisicao. Trocar resolucao, foco ou FOV invalida fx, fy, cx, cy — nao existe reescala implicita."
+      "valido_somente_para": "camera s600 em 3840x2160, com o mesmo foco e o mesmo campo de visao da aquisicao. Trocar resolucao, foco ou FOV invalida fx, fy, cx, cy — nao existe reescala implicita."
     },
     "external_quality": {
       "source": "caliscope.intrinsic_report",
@@ -190,51 +140,51 @@
         "orientation_sufficient": true
       },
       "metrics": {
-        "rmse": 0.5330743546753113,
+        "rmse": 0.5988605967600696,
         "frames_used": 30,
-        "coverage_fraction": 0.92,
-        "edge_coverage_fraction": 0.875,
-        "corner_coverage_fraction": 0.75,
+        "coverage_fraction": 1.0,
+        "edge_coverage_fraction": 1.0,
+        "corner_coverage_fraction": 1.0,
         "orientation_sufficient": true,
-        "orientation_count": 5,
+        "orientation_count": 6,
         "selected_frames": [
-          2675,
-          675,
-          2330,
-          885,
-          160,
-          2895,
-          2950,
-          515,
+          1005,
+          3215,
+          2990,
+          1850,
+          3435,
           1000,
-          1030,
-          1690,
-          2205,
-          1470,
-          1365,
-          545,
-          2655,
-          990,
-          690,
-          925,
-          2135,
-          1285,
-          730,
-          2795,
-          2045,
-          320,
-          1175,
-          165,
-          1825,
-          1370,
-          670
+          1555,
+          3530,
+          4830,
+          2025,
+          3815,
+          3355,
+          4535,
+          4815,
+          3350,
+          895,
+          4285,
+          2935,
+          2495,
+          3245,
+          1445,
+          345,
+          4295,
+          2350,
+          4150,
+          3670,
+          4610,
+          3465,
+          3990,
+          2855
         ]
       },
-      "bundle_error_px": 0.5330743546753113,
+      "bundle_error_px": 0.5988605967600696,
       "veredicto": {
         "rmse_px_max": {
           "aprovado": true,
-          "medido": "0.5331 <= 0.8"
+          "medido": "0.5989 <= 0.8"
         },
         "frames_used_min": {
           "aprovado": true,
@@ -242,27 +192,31 @@
         },
         "coverage_fraction_min": {
           "aprovado": true,
-          "medido": "0.92 >= 0.8"
+          "medido": "1.0 >= 0.8"
         },
         "edge_coverage_fraction_min": {
           "aprovado": true,
-          "medido": "0.875 >= 0.75"
+          "medido": "1.0 >= 0.75"
         },
         "corner_coverage_fraction_min": {
           "aprovado": true,
-          "medido": "0.75 >= 0.5"
+          "medido": "1.0 >= 0.5"
         },
         "orientation_sufficient": {
           "aprovado": true,
-          "medido": "orientation_count=5"
+          "medido": "orientation_count=6"
         }
       },
       "passed": true
     },
     "transferencia": {
-      "status": "nao_validada",
-      "motivo": "K medido em outro projeto (vrchat, 2026-08-05). Reaproveitar e hipotese, nao dado. Rode validar_transferencia.py na bancada do pose para medir reprojecao com K congelado antes de usar.",
-      "evidencia": null
+      "status": "validada",
+      "motivo": "K medido nesta bancada pelo Caliscope 0.11.3 em 2026-09-01 (3840x2160).",
+      "evidencia": {
+        "rmse_px": 0.5988605967600696,
+        "frames_used": 30,
+        "coverage_fraction": 1.0
+      }
     },
     "external_boundary": {
       "kind": "caliscope_intrinsic_import",
@@ -273,44 +227,44 @@
   },
   "metrics": {
     "intrinsic": {
-      "rmse": 0.5330743546753113,
+      "rmse": 0.5988605967600696,
       "frames_used": 30,
-      "coverage_fraction": 0.92,
-      "edge_coverage_fraction": 0.875,
-      "corner_coverage_fraction": 0.75,
+      "coverage_fraction": 1.0,
+      "edge_coverage_fraction": 1.0,
+      "corner_coverage_fraction": 1.0,
       "orientation_sufficient": true,
-      "orientation_count": 5,
+      "orientation_count": 6,
       "selected_frames": [
-        2675,
-        675,
-        2330,
-        885,
-        160,
-        2895,
-        2950,
-        515,
+        1005,
+        3215,
+        2990,
+        1850,
+        3435,
         1000,
-        1030,
-        1690,
-        2205,
-        1470,
-        1365,
-        545,
-        2655,
-        990,
-        690,
-        925,
-        2135,
-        1285,
-        730,
-        2795,
-        2045,
-        320,
-        1175,
-        165,
-        1825,
-        1370,
-        670
+        1555,
+        3530,
+        4830,
+        2025,
+        3815,
+        3355,
+        4535,
+        4815,
+        3350,
+        895,
+        4285,
+        2935,
+        2495,
+        3245,
+        1445,
+        345,
+        4295,
+        2350,
+        4150,
+        3670,
+        4610,
+        3465,
+        3990,
+        2855
       ]
     },
     "criteria": {
@@ -324,58 +278,13 @@
     },
     "passed": true
   },
-  "gate": {
-    "binding": {
-      "stable_id": "USB\\VID_328F&PID_00AD&MI_00\\7&22EA2E16&0&0000",
-      "friendly_name": "EMEET SmartCam S600",
-      "binding_method": "stable_pnp_id_and_exact_friendly_name"
-    },
-    "mode": {
-      "width": 1920,
-      "height": 1080,
-      "fps": 60.000240000960005,
-      "codec": "MJPEG",
-      "backend": "DSHOW"
-    },
-    "controls": {
-      "focus": {
-        "value": 243.0,
-        "observavel": true,
-        "policy": "gate_readback",
-        "travado_durante_o_gate": false,
-        "valores_observados": [
-          200.0,
-          243.0,
-          254.0,
-          281.0
-        ],
-        "geometria": "foco altera K; divergencia invalida a transferencia"
-      },
-      "autofocus": {
-        "value": 1.0,
-        "observavel": true,
-        "geometria": "autofoco ligado faz K variar com a distancia da cena"
-      },
-      "exposure": {
-        "value": -6.0,
-        "observavel": true,
-        "policy": "gate_readback",
-        "geometria": "exposicao nao altera K; so brilho e ruido"
-      }
-    },
-    "alertas": [
-      "foco variou durante o gate: [200.0, 243.0, 254.0, 281.0]. Intrinseco so vale para um foco; a transferencia precisa ser medida, nao presumida.",
-      "autofocus=1.0 no readback final (0 = manual). Com autofoco ativo, fx e fy mudam conforme a distancia da cena."
-    ],
-    "gate_passed": true,
-    "generated_at_utc": "2026-08-05T17:35:40.751347+00:00"
-  },
-  "imported_at": "2026-08-07T13:15:49+00:00",
-  "import_id": "73eb2587900142dbf3547926",
+  "gate": null,
+  "imported_at": "2026-09-01T20:25:44+00:00",
+  "import_id": "c82e820bcff7c9b321b85c3b",
   "integrity": {
     "algorithm": "sha256",
     "canonicalization": "json-sort-keys-v1",
-    "content_sha256": "73eb2587900142dbf3547926c1d868e5fb00a1e24e622d50f348fcc870d76f98",
+    "content_sha256": "c82e820bcff7c9b321b85c3be13dd737be00f01a94685072fad6ed46681e5fc8",
     "assurance": "sha256 detecta alteracao local; nao autentica operador nem origem"
   }
 }

@@ -1,28 +1,25 @@
-"""Gate de transferencia: o intrinseco importado descreve ESTA bancada?
+"""Gate de transferencia: o intrinseco ativo ainda descreve ESTA bancada?
 
 Por que este arquivo existe
 ---------------------------
-Os intrinsecos vieram do projeto `vrchat`, medidos em 2026-08-05 na mesma
-camera fisica (EMEET SmartCam S600, `stable_id` USB\\VID_328F&PID_00AD). Isso
-torna a reutilizacao *plausivel* — nao a torna *medida*. Entre os dois projetos
-podem ter mudado, sem deixar rastro no arquivo:
+O K da S600 foi medido nesta bancada em 2026-09-01 (3840x2160). Isso nao
+congela a geometria para sempre. Sem deixar rastro no camera_array.toml
+podem mudar:
 
-* o foco (o gate do vrchat observou foco em 200, 243, 254 e 281 — nao travado,
-  com `autofocus=1`);
-* o campo de visao (a S600 tem FOV ajustavel de 40 a 73 graus, e nenhum dos
-  dois projetos registra a posicao desse ajuste);
+* o foco (o driver frequentemente ignora CAP_PROP_AUTOFOCUS=0);
+* o campo de visao (FOV ajustavel 40-73 graus);
 * a resolucao efetivamente negociada pelo DirectShow.
 
-Qualquer um dos tres muda `fx, fy, cx, cy`. Nenhum aparece no `camera_array.toml`.
-Entao a pergunta "posso reusar?" so tem uma resposta honesta: medir.
+Qualquer um dos tres muda fx, fy, cx, cy. A pergunta "o K ainda vale?"
+so tem uma resposta honesta: medir.
 
 Hipotese testada
 ----------------
-    H0: o par (K, dist) importado descreve a camera na bancada atual do pose.
+    H0: o par (K, dist) do perfil ativo descreve a camera agora.
 
 Procedimento
 ------------
-1. Capture N >= 10 vistas do tabuleiro ChArUco padrao, em 1920x1080, cobrindo
+1. Capture N >= 10 vistas do tabuleiro ChArUco padrao, em 3840x2160, cobrindo
    centro, bordas e cantos, com inclinacoes variadas.
 2. Para cada vista, estima-se a pose por `solvePnP` com **K e dist congelados**.
    Nao ha reajuste. Se K estivesse errado, o erro apareceria como residuo — que

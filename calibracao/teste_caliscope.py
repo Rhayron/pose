@@ -166,10 +166,10 @@ def teste_importacao_e_selo(tmp: Path) -> Path:
 
     imported = importar_intrinsecos(RAIZ / "caliscope-import.json")
     checar(imported.passed, "importacao aprovada nos criterios pre-registrados")
-    checar(imported.profile["intrinsics"]["image_size"] == [1920, 1080],
-           "intrinseco vale para 1920x1080")
-    checar(imported.profile["transferencia"]["status"] == "nao_validada",
-           "perfil nasce com transferencia nao validada")
+    checar(imported.profile["intrinsics"]["image_size"] == [3840, 2160],
+           "intrinseco vale para 3840x2160")
+    checar(imported.profile["transferencia"]["status"] == "validada",
+           "K medido nesta bancada nasce validado")
     checar(
         imported.profile["external_boundary"]["internal_validation_evidence_present"]
         is False,
@@ -181,16 +181,28 @@ def teste_importacao_e_selo(tmp: Path) -> Path:
     perfil = tmp / "s600.json"
     ativar(documento, perfil)
 
-    # O carregador tem de recusar um perfil ainda nao validado na bancada.
+    carregado = carregar_perfil_ativo(perfil)
+    checar(carregado["K"][0][0] == 3119.7653658554414,
+           "perfil validado e aceito no carregamento")
+
+    cfg = json.loads((RAIZ / "caliscope-import.json").read_text(encoding="utf-8"))
+    cfg["origem"]["transferencia_status"] = "nao_validada"
+    copia_nv = tmp / "nao_validada"
+    shutil.copytree(RAIZ / "origem_caliscope", copia_nv / "origem_caliscope")
+    (copia_nv / "saida").mkdir(parents=True, exist_ok=True)
+    shutil.copy(RAIZ / "saida" / "tabuleiro.json", copia_nv / "saida" / "tabuleiro.json")
+    cfg_nv = copia_nv / "caliscope-import.json"
+    cfg_nv.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+    nao_validado = importar_intrinsecos(cfg_nv)
+    doc_nv = tmp / "import-nv.json"
+    nao_validado.save(doc_nv)
+    perfil_nv = tmp / "s600-nv.json"
+    ativar(doc_nv, perfil_nv)
     try:
-        carregar_perfil_ativo(perfil)
+        carregar_perfil_ativo(perfil_nv)
         checar(False, "perfil nao validado deveria ser recusado no carregamento")
     except CaliscopeImportError:
         checar(True, "perfil nao validado e recusado no carregamento")
-
-    checar(carregar_perfil_ativo(perfil, exigir_transferencia=False)["K"][0][0]
-           == 1495.7420106987456,
-           "K e legivel com exigir_transferencia=False")
 
     # Adulteracao de um digito de fx precisa quebrar o selo.
     raw = json.loads(perfil.read_text(encoding="utf-8"))
@@ -212,7 +224,7 @@ def teste_importacao_e_selo(tmp: Path) -> Path:
     shutil.copy(RAIZ / "caliscope-import.json", copia / "caliscope-import.json")
     alvo = copia / "origem_caliscope" / "camera_array.toml"
     alvo.write_text(
-        alvo.read_text(encoding="utf-8").replace("1495.7420106987456", "1600.0"),
+        alvo.read_text(encoding="utf-8").replace("3119.7653658554414", "3200.0"),
         encoding="utf-8",
     )
     try:

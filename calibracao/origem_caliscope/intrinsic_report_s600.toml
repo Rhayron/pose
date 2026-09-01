@@ -1,8 +1,8 @@
-rmse = 0.5330743546753113
+rmse = 0.5988605967600696
 frames_used = 30
-coverage_fraction = 0.92
-edge_coverage_fraction = 0.875
-corner_coverage_fraction = 0.75
+coverage_fraction = 1.0
+edge_coverage_fraction = 1.0
+corner_coverage_fraction = 1.0
 orientation_sufficient = true
-orientation_count = 5
-selected_frames = [2675, 675, 2330, 885, 160, 2895, 2950, 515, 1000, 1030, 1690, 2205, 1470, 1365, 545, 2655, 990, 690, 925, 2135, 1285, 730, 2795, 2045, 320, 1175, 165, 1825, 1370, 670]
+orientation_count = 6
+selected_frames = [1005, 3215, 2990, 1850, 3435, 1000, 1555, 3530, 4830, 2025, 3815, 3355, 4535, 4815, 3350, 895, 4285, 2935, 2495, 3245, 1445, 345, 4295, 2350, 4150, 3670, 4610, 3465, 3990, 2855]

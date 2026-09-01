@@ -1,55 +1,55 @@
 {
-  "schema": {"name": "pose.caliscope_intrinsic_import_config", "version": 1},
+  "schema": {
+    "name": "pose.caliscope_intrinsic_import_config",
+    "version": 1
+  },
   "caliscope_version": "0.11.3",
   "camera_key": "s600",
-  "cam_id": 1,
+  "cam_id": 0,
   "rotation_degrees": 0,
-
-  "_nota": [
-    "Este import traz SOMENTE os intrinsecos de UMA camera. O projeto pose e",
-    "monocular: nao ha extrinseca, baseline nem par estereo a importar.",
-    "cam_id=1 e a identidade dentro do projeto Caliscope de origem (vrchat),",
-    "nao o indice DirectShow. No camera_array.toml a camera 1 e a S600 1920x1080."
-  ],
-
   "origem": {
-    "projeto": "C:\\Users\\Rhayron\\Projects\\vrchat",
-    "capture_volume": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\extrinsic\\capture_volume",
-    "import_id_original": "319abd4e63e22ae548c2ac61",
-    "profile_id_original": "cf6493a42c5d3a1de4004e4a",
-    "calibrado_em": "2026-08-05",
-    "operador_declarou": "mesma camera fisica; verificada por stable_id USB\\VID_328F&PID_00AD"
+    "projeto": "C:\\Users\\Rhayron\\Projects\\pose",
+    "workspace": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\caliscope-workspace",
+    "calibrado_em": "2026-09-01",
+    "operador_declarou": "S600 3840x2160@30 MJPEG; tabuleiro contrato 34.0 mm; Caliscope Autocalibrate cam_0",
+    "transferencia_status": "validada",
+    "transferencia_motivo": "K medido nesta bancada pelo Caliscope 0.11.3 em 2026-09-01 (3840x2160).",
+    "transferencia_evidencia": {
+      "rmse_px": 0.5988605967600696,
+      "frames_used": 30,
+      "coverage_fraction": 1.0
+    }
   },
-
   "artefatos": {
-    "camera_array":    {"path": "origem_caliscope/camera_array.toml",           "sha256": "51805d3773b4b3bb6ccf8426b279da607f8398256647f4a3c8e6bd0ca470c4db"},
-    "intrinsic_report":{"path": "origem_caliscope/intrinsic_report_s600.toml",  "sha256": "7ba4f61326b4f8adec7936ccb6f7c0eab23416a05050f88b9a01d2c5416e5c12"},
-    "charuco_toml":    {"path": "origem_caliscope/intrinsic_charuco.toml",      "sha256": "5eb2297662a6a276aa95bfd5b353fd8650a1746f32ef18a0e5a762e1fc4ece03"},
-    "image_points":    {"path": "origem_caliscope/image_points.csv",            "sha256": "8c4dc2a9b9d28b6dad9719f0e759539c55a3f5fddead48b9cb078be41707ba69"},
-    "world_points":    {"path": "origem_caliscope/world_points.csv",            "sha256": "b652f2913ffc9d982b460c698568aeb74e24e55709be54de66a8a24b8fc07cb3"},
-    "gate_report":     {"path": "origem_caliscope/gate_s600.json",              "sha256": "ff1194d99c1a2ba002271c41f52123f4eceec17297cf171df12ddca9e277702a"},
-    "board_contract":  {"path": "saida/tabuleiro.json",                         "sha256": "f82d8fbb06bbd28d9c0087a3e75c84926b90daeffa83117a16214c473dcfec3a"}
+    "camera_array": {
+      "path": "origem_caliscope/camera_array.toml",
+      "sha256": "82fb74e187196d067d5f68591eb6a8b2bbcb9b6ce81708f14b7d8b45245ca5f3",
+      "size_bytes": 458
+    },
+    "intrinsic_report": {
+      "path": "origem_caliscope/intrinsic_report_s600.toml",
+      "sha256": "e93ef6395b4304ba2d25170dcae223ae12c862cfe07007e5b9523df4239549a9",
+      "size_bytes": 384
+    },
+    "charuco_toml": {
+      "path": "origem_caliscope/intrinsic_charuco.toml",
+      "sha256": "646b340dc156cd965b59bda035d8a88d8b40f11e433747aa912ea2a1e99863e7",
+      "size_bytes": 235
+    },
+    "board_contract": {
+      "path": "saida/tabuleiro.json",
+      "sha256": "f82d8fbb06bbd28d9c0087a3e75c84926b90daeffa83117a16214c473dcfec3a",
+      "size_bytes": 258
+    }
   },
-
   "aquisicao": {
-    "_nota": "Exposicao de aquisicao NAO autoriza runtime. Eixos independentes.",
     "exposure": -3.0,
     "videos": {
       "intrinsic": {
-        "path": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\intrinsic\\cam_1.mp4",
-        "sha256": "236e0448a4a5e2a3a2ed951d520a163c23f22d96bb25e7e5fa7fd907b6295255",
-        "verificar": false
-      },
-      "extrinsic": {
-        "path": "C:\\Users\\Rhayron\\Projects\\vrchat\\calibracao\\caliscope-workspace\\calibration\\extrinsic\\cam_1.mp4",
-        "sha256": "ca35e8d0763bdd01f923a86ae992f80e00d7b261f9e04a561f63f04d45ad4be9",
+        "path": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\caliscope-workspace\\calibration\\intrinsic\\cam_0.mp4",
+        "sha256": "d62b6f6500c299109ca2d814a21e8df30991daa52690ff42eb0d90e1bab0cfe3",
         "verificar": false
       }
-    },
-    "_nota_verificar": [
-      "verificar=false porque os MP4 (72 MB e 84 MB) permanecem no projeto vrchat",
-      "e nao sao copiados para ca. O hash fica registrado para rastreabilidade.",
-      "Rode 'caliscope_cli.py importar --verificar-videos' para exigir os arquivos."
-    ]
+    }
   }
 }

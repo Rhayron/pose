@@ -37,7 +37,7 @@ import numpy as np
 
 from camera import FonteCamera, Quadro
 
-SCHEMA = {"name": "pose.sessao_aquisicao", "version": 1}
+SCHEMA = {"name": "pose.sessao_aquisicao", "version": 2}
 
 # Um degrau de brilho na ROI acima disto conta como evento luminoso. O valor é
 # alto de propósito: variação de iluminação ambiente e ruído de sensor ficam
@@ -65,7 +65,7 @@ class Gravacao:
     """Escreve quadros em disco sem bloquear a thread de captura.
 
     A escrita vai para uma fila consumida por outra thread. Se o disco engasgar,
-    a captura continua e a fila cresce — perder quadro por I/O seria perder
+    a captura continua e a fila cresce: perder quadro por I/O seria perder
     justamente o instante que a sessão existe para registrar.
     """
 
@@ -85,6 +85,8 @@ class Gravacao:
         self._fila: queue.Queue[np.ndarray | None] = queue.Queue(maxsize=limite_fila)
         self._writer: cv2.VideoWriter | None = None
         self._thread: threading.Thread | None = None
+        self._lock = threading.Lock()
+        self._erro_escrita: str | None = None
         self.quadros: list[dict[str, Any]] = []
         self.descartados_por_fila = 0
         self._n_escritos = 0
@@ -106,43 +108,94 @@ class Gravacao:
 
     def receber(self, quadro: Quadro) -> None:
         """Chamado pela thread de captura para cada quadro."""
-        registro = {
-            "i": len(self.quadros),
-            "indice_fonte": quadro.indice,
-            "monotonic_ns": quadro.monotonic_ns,
-        }
-        if quadro.brilho_roi is not None:
-            registro["brilho_roi"] = round(quadro.brilho_roi, 3)
-        self.quadros.append(registro)
         try:
             self._fila.put_nowait(quadro.imagem)
         except queue.Full:
-            # Registrado, nunca silencioso: um quadro na tabela sem quadro no
-            # vídeo quebraria a correspondência índice↔carimbo.
-            self.descartados_por_fila += 1
-            self.quadros.pop()
+            # O descarte é contabilizado, mas o registro não entra na tabela:
+            # assim índice de vídeo e carimbo continuam correspondendo 1:1.
+            with self._lock:
+                self.descartados_por_fila += 1
+            return
+
+        with self._lock:
+            registro = {
+                "i": len(self.quadros),
+                "indice_fonte": quadro.indice,
+                "monotonic_ns": quadro.monotonic_ns,
+            }
+            if quadro.brilho_roi is not None:
+                registro["brilho_roi"] = round(quadro.brilho_roi, 3)
+            self.quadros.append(registro)
 
     def encerrar(self) -> None:
         if self._thread is not None:
             self._fila.put(None)
             self._thread.join(timeout=30.0)
+            if self._thread.is_alive():
+                raise ErroSessao(
+                    "a fila de vídeo não terminou em 30 s; o arquivo foi preservado "
+                    "para recuperação e não deve ser considerado completo"
+                )
             self._thread = None
         if self._writer is not None:
             self._writer.release()
             self._writer = None
+        if self._erro_escrita is not None:
+            raise ErroSessao(f"falha ao escrever o vídeo: {self._erro_escrita}")
 
     def _laco(self) -> None:
         while True:
             imagem = self._fila.get()
             if imagem is None:
                 return
-            if self._writer is not None:
-                self._writer.write(imagem)
-                self._n_escritos += 1
+            if self._writer is not None and self._erro_escrita is None:
+                try:
+                    self._writer.write(imagem)
+                    with self._lock:
+                        self._n_escritos += 1
+                except Exception as exc:  # noqa: BLE001
+                    # Continua drenando a fila para que encerrar() nunca fique
+                    # bloqueado tentando inserir o sentinela numa fila cheia.
+                    self._erro_escrita = repr(exc)
 
     @property
     def n_escritos(self) -> int:
-        return self._n_escritos
+        with self._lock:
+            return self._n_escritos
+
+    def snapshot_quadros(self) -> list[dict[str, Any]]:
+        """Cópia consistente da tabela para UI e serialização."""
+        with self._lock:
+            return [dict(quadro) for quadro in self.quadros]
+
+    def quadro_mais_proximo(self, monotonic_ns: int) -> tuple[dict[str, Any] | None, float]:
+        """Retorna o quadro gravado mais próximo e a diferença marcador−quadro."""
+        quadros = self.snapshot_quadros()
+        if not quadros:
+            return None, float("nan")
+        melhor = min(quadros, key=lambda q: abs(q["monotonic_ns"] - monotonic_ns))
+        return melhor, (monotonic_ns - melhor["monotonic_ns"]) / 1e6
+
+    def telemetria(self) -> dict[str, Any]:
+        """Resumo barato e thread-safe para a barra de saúde da interface."""
+        with self._lock:
+            primeiro = self.quadros[0]["monotonic_ns"] if self.quadros else None
+            ultimo = self.quadros[-1]["monotonic_ns"] if self.quadros else None
+            recebidos = len(self.quadros)
+            escritos = self._n_escritos
+            descartados = self.descartados_por_fila
+        return {
+            "n_quadros_recebidos": recebidos,
+            "n_quadros_escritos": escritos,
+            "duracao_s": (
+                round((ultimo - primeiro) / 1e9, 3)
+                if primeiro is not None and ultimo is not None else 0.0
+            ),
+            "fila_atual": self._fila.qsize(),
+            "fila_limite": self._fila.maxsize,
+            "descartados_por_fila": descartados,
+            "erro_escrita": self._erro_escrita,
+        }
 
 
 def detectar_evento_luminoso(
@@ -167,10 +220,10 @@ def detectar_evento_luminoso(
     `t_k`. Se a luz acendeu em `t_on` dentro dessa janela, a fração do tempo de
     exposição com luz acesa é `(t_k − t_on)/T_exp`, e é exatamente essa fração
     que aparece no brilho normalizado. Daí `t_on = t_k − fração · T_exp`, o que
-    leva a incerteza de ±1 quadro (16,7 ms a 60 fps) para a casa do
+    leva a incerteza de ±1 quadro (um período, ~48 ms a 21 fps) para a casa do
     milissegundo.
 
-    `T_exp` é assumido igual ao período entre quadros quando não informado —
+    `T_exp` é assumido igual ao período entre quadros quando não informado:
     verdade aproximada com exposição longa (−6 ≈ 1/64 s contra período de
     1/60 s). Com exposição curta a fração satura e a interpolação simplesmente
     não dispara, em vez de mentir.
@@ -288,6 +341,53 @@ def _qualidade_sincronismo(
     return resultado
 
 
+def resumir_pre_roll(
+    quadros: list[dict[str, Any]], marcador: dict[str, Any] | None
+) -> dict[str, Any]:
+    """Descreve os quadros realmente escritos antes do marcador de clique."""
+    if marcador is None:
+        return {
+            "presente": False,
+            "duracao_ms": None,
+            "n_quadros_antes_do_marcador": 0,
+            "motivo": "marcador de clique não registrado",
+        }
+    if not quadros:
+        return {
+            "presente": False,
+            "duracao_ms": 0.0,
+            "n_quadros_antes_do_marcador": 0,
+            "motivo": "nenhum quadro escrito antes do marcador",
+        }
+
+    instante = int(marcador["monotonic_ns"])
+    anteriores = [q for q in quadros if int(q["monotonic_ns"]) < instante]
+    inicio = int(quadros[0]["monotonic_ns"])
+    return {
+        "presente": bool(anteriores),
+        "inicio_monotonic_ns": inicio,
+        "marcador_monotonic_ns": instante,
+        "duracao_ms": round(max(0, instante - inicio) / 1e6, 3),
+        "n_quadros_antes_do_marcador": len(anteriores),
+        "nota": (
+            "o escritor foi aberto e assinou a fonte antes de o listener global "
+            "ser ativado; estes quadros são pré-roll real no próprio vídeo"
+        ),
+    }
+
+
+def _escrever_json_atomico(caminho: Path, documento: dict[str, Any]) -> None:
+    """Publica JSON completo de uma vez; nunca expõe metade do documento final."""
+    caminho = Path(caminho)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    temporario = caminho.with_suffix(caminho.suffix + ".tmp")
+    temporario.write_text(
+        json.dumps(documento, indent=2, ensure_ascii=False, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    temporario.replace(caminho)
+
+
 def salvar_metadados(
     caminho: Path,
     *,
@@ -301,8 +401,9 @@ def salvar_metadados(
     roi_evento: tuple[int, int, int, int] | None,
     notas: str = "",
 ) -> dict[str, Any]:
+    quadros = gravacao.snapshot_quadros()
     evento = (
-        detectar_evento_luminoso(gravacao.quadros)
+        detectar_evento_luminoso(quadros)
         if roi_evento is not None
         else {"detectado": False, "motivo": "ROI de evento não configurada"}
     )
@@ -317,9 +418,10 @@ def salvar_metadados(
             "sha256": _sha256(video) if video.exists() else None,
             "tamanho_bytes": video.stat().st_size if video.exists() else None,
             "codec": gravacao.codec,
-            "n_quadros_na_tabela": len(gravacao.quadros),
+            "n_quadros_na_tabela": len(quadros),
             "n_quadros_escritos": gravacao.n_escritos,
             "descartados_por_fila": gravacao.descartados_por_fila,
+            "pre_roll": resumir_pre_roll(quadros, marcador),
         },
         "calibracao": perfil,
         "camera": fonte.diagnostico(),
@@ -330,7 +432,7 @@ def salvar_metadados(
             "latencia_pipeline_ms": latencia_ms,
             "roi_evento": list(roi_evento) if roi_evento else None,
         },
-        "quadros": gravacao.quadros,
+        "quadros": quadros,
         "limitacoes": [
             "O carimbo de cada quadro é o instante de entrega pelo driver, não o "
             "instante de exposição do sensor. A diferença é a latência de "
@@ -347,27 +449,47 @@ def salvar_metadados(
     for alerta in documento["camera"].get("foco_contra_calibracao", {}).get("alertas", []):
         documento["limitacoes"].insert(0, f"FOCO: {alerta}")
 
-    if len(gravacao.quadros) != gravacao.n_escritos:
+    if len(quadros) != gravacao.n_escritos:
         documento["limitacoes"].insert(
             0,
-            f"ATENÇÃO: {len(gravacao.quadros)} quadros na tabela e "
+            f"ATENÇÃO: {len(quadros)} quadros na tabela e "
             f"{gravacao.n_escritos} escritos no vídeo. A correspondência "
             "índice↔carimbo está quebrada; não use esta sessão.",
         )
 
-    caminho = Path(caminho)
-    caminho.parent.mkdir(parents=True, exist_ok=True)
-    caminho.write_text(
-        json.dumps(documento, indent=2, ensure_ascii=False, allow_nan=False) + "\n",
-        encoding="utf-8",
-    )
+    _escrever_json_atomico(Path(caminho), documento)
     return documento
+
+
+def salvar_manifesto_incompleto(
+    caminho: Path, *, sessao_id: str, video: Path, erro: str
+) -> Path:
+    """Best effort de recuperação quando a finalização completa falha."""
+    manifesto = Path(caminho).with_name(f"sessao_{sessao_id}.incompleta.json")
+    documento = {
+        "schema": SCHEMA,
+        "sessao_id": sessao_id,
+        "gerado_em": _agora(),
+        "estado": "incompleta",
+        "erro_finalizacao": erro,
+        "video": {
+            "arquivo": Path(video).name,
+            "preservado": Path(video).exists(),
+            "tamanho_bytes": Path(video).stat().st_size if Path(video).exists() else None,
+        },
+        "nota": (
+            "A finalização completa falhou. O vídeo foi preservado deliberadamente; "
+            "este manifesto não autoriza uso científico da sessão."
+        ),
+    }
+    _escrever_json_atomico(manifesto, documento)
+    return manifesto
 
 
 def carregar_perfil_para_sessao(caminho: Path | None) -> dict[str, Any] | None:
     """Lê o perfil de calibração e registra o estado da transferência.
 
-    Não recusa perfil `nao_validada` — gravar vídeo não exige calibração
+    Não recusa perfil `nao_validada`: gravar vídeo não exige calibração
     validada. Mas o estado viaja dentro dos metadados, para que qualquer
     processamento posterior saiba sobre o que está apoiado.
     """
@@ -379,8 +501,8 @@ def carregar_perfil_para_sessao(caminho: Path | None) -> dict[str, Any] | None:
 
     import sys
 
-    raiz = caminho.resolve().parent.parent
-    sys.path.insert(0, str(raiz / "calibracao"))
+    raiz_calibracao = caminho.resolve().parent.parent
+    sys.path.insert(0, str(raiz_calibracao))
     from caliscope_import import carregar_perfil_ativo  # noqa: PLC0415
 
     dados = carregar_perfil_ativo(caminho, exigir_transferencia=False)
@@ -404,4 +526,8 @@ def carregar_perfil_para_sessao(caminho: Path | None) -> dict[str, Any] | None:
 
 
 def novo_id_sessao() -> str:
-    return time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    # Milissegundos evitam colisão ao desarmar e rearmar dentro do mesmo segundo.
+    return (
+        time.strftime("%Y%m%d_%H%M%S", time.localtime())
+        + f"_{(time.time_ns() // 1_000_000) % 1000:03d}"
+    )

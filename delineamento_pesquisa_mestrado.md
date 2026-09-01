@@ -65,7 +65,9 @@ A resposta do estado da arte é substituir o detector heurístico por detecção
 
 ### 2.3. O problema refrativo e a calibração da visão subaquática
 
-A visão computacional convencional assume o modelo *pinhole*: raios que convergem para um único centro óptico. Sob a água, essa hipótese é violada, pois cada raio sofre refração ao atravessar as interfaces ar–vidro (a janela ou domo do *housing* da câmera) e vidro–água. Em uma janela plana (*flat port*), a refração introduz distorção dependente do ângulo e da profundidade que **não** pode ser plenamente absorvida pelos coeficientes de distorção radial do modelo clássico; o erro residual degrada diretamente a precisão do PnP e, consequentemente, da pose. A correção rigorosa exige modelagem refrativa explícita (traçado de raios pelas interfaces) e ferramentas de calibração específicas que estimem os parâmetros geométricos das interfaces (espessura e orientação da janela, índices de refração, distância câmera–janela). A adoção de calibração refrativa é, portanto, condição necessária para que qualquer ganho de robustez das redes de estimação de pose se traduza em acurácia métrica real.
+A visão computacional convencional assume o modelo *pinhole*: raios que convergem para um único centro óptico. Quando o alvo está na água e a câmera no ar, essa hipótese é violada: cada raio sofre refração ao atravessar as interfaces **ar–parede–água** do tanque (ou, em configurações de campo, ar–janela–água de um *housing*). Em uma interface plana, a refração introduz distorção dependente do ângulo e da profundidade que **não** pode ser plenamente absorvida pelos coeficientes de distorção radial do modelo clássico; o erro residual degrada diretamente a precisão do PnP e, consequentemente, da pose.
+
+Neste trabalho a geometria **não** é a de *flat port* de *housing* submersível. A câmera permanece no ar, sobre tripé, e observa o marcador submerso **através da parede transparente do tanque**. A distância câmera–parede é da ordem de dezenas de centímetros — maior que a de um *housing* — e **amplifica** o efeito refrativo. A correção rigorosa exige modelagem refrativa explícita (traçado de raios pelas interfaces) e a medição dos parâmetros geométricos da parede (espessura, índice de refração, normal, distância câmera–parede). Sem esses números, “calibração refrativa” reduz-se a ajuste de curva. A adoção do modelo refrativo é, portanto, condição necessária para que qualquer ganho de robustez das redes de estimação de pose se traduza em acurácia métrica real (H₂).
 
 ### 2.4. Realce de imagem subaquática como pré-processamento
 
@@ -118,7 +120,7 @@ Desenvolver e validar experimentalmente, em ambiente controlado de tanque de lab
 
 ### 5.2. Objetivos específicos
 
-1. Projetar e caracterizar o aparato experimental (tanque, câmera com *housing*, iluminação, conjunto transdutor/braçadeira/marcadores, amostra de tubulação e sistema de referência eletromecânico) e estabelecer o protocolo de calibração refrativa da câmera.
+1. Projetar e caracterizar o aparato experimental (tanque transparente, câmera em tripé no ar observando através da parede, iluminação, conjunto transdutor/braçadeira/marcadores, amostra de tubulação e sistema de referência eletromecânico) e estabelecer o protocolo de calibração refrativa da cadeia ar–parede–água.
 2. Construir um conjunto de dados subaquático rotulado com pose 6DoF de referência, combinando aquisições reais em tanque (com *ground truth* eletromecânico) e dados sintéticos renderizados a partir do modelo CAD do conjunto, submetidos a adaptação de domínio.
 3. Implementar e treinar o módulo de estimação de pose por *keypoints* densos (estilo PVNet) e o módulo de detecção fiducial profunda (estilo Deep ChArUco), bem como a estratégia de fusão entre ambos.
 4. Avaliar quantitativamente a acurácia e a robustez da pose estimada em função de níveis controlados de turbidez e de oclusão, comparando as estratégias isoladas e fundida contra a referência eletromecânica.
@@ -148,15 +150,29 @@ Explicita-se que a Fase 2 **não** realiza reconstrução de imagem; um eventual
 
 ### 6.2. Aparato experimental — o tanque de laboratório
 
-A validação será integralmente conduzida em tanque de laboratório do LASSIP, ambiente que oferece controle sobre as variáveis de degradação (turbidez, iluminação, geometria) e, sobretudo, acesso a uma referência de pose confiável. Os componentes do aparato:
+A validação será integralmente conduzida em tanque de laboratório do LASSIP, ambiente que oferece controle sobre as variáveis de degradação (turbidez, iluminação, geometria) e, sobretudo, acesso a uma referência de pose confiável.
 
-- **Tanque.** Reservatório com água, dimensionado para acomodar a amostra de tubulação, o conjunto transdutor/braçadeira, o sistema de posicionamento e o campo de visão da(s) câmera(s). Recomenda-se documentar dimensões internas, material das paredes e presença de janelas ópticas, pois esses fatores afetam reflexões e o percurso óptico.
-- **Amostra de tubulação de aço.** Segmento de tubulação representativo, posicionado no interior do tanque, servindo simultaneamente como alvo geométrico da inspeção e como referencial da peça para o registro espacial. Idealmente, a amostra deve conter descontinuidades conhecidas (naturais ou usinadas — entalhes, furos de fundo plano) que permitam avaliar a fidelidade do registro final.
-- **Conjunto transdutor/braçadeira.** O transdutor ultrassônico montado em uma braçadeira, cujo modelo CAD é conhecido e servirá de base para a definição dos pontos-chave 3D (Fase 1). A braçadeira também é o suporte físico dos marcadores fiduciais.
-- **Marcadores fiduciais.** Tabuleiro(s) ChArUco fixado(s) rigidamente à braçadeira, com posição e orientação conhecidas em relação ao referencial do transdutor (a transformação braçadeira→marcador deve ser medida ou calibrada). Avaliar-se-á, como variante, o uso de marcadores ativos (autoiluminados) para mitigar *backscatter*.
-- **Câmera e *housing*.** Câmera com resolução, taxa de quadros e óptica adequadas, alojada em *housing* submersível com janela plana (*flat port*) — configuração que impõe calibração refrativa. Registrar modelo, resolução, distância focal, abertura e características da janela.
-- **Iluminação.** Fonte de iluminação controlada, cuja intensidade e geometria serão variáveis experimentais (a iluminação frontal intensa aumenta o *backscatter*; estratégias de iluminação lateral ou marcadores ativos serão contrastadas).
-- **Sistema de posicionamento e referência de *ground truth*.** Este é o elemento metodologicamente crítico. O sistema eletromecânico existente (scanner motorizado / encoder / braço de cinemática conhecida) será empregado para mover o transdutor por trajetórias conhecidas e, simultaneamente, fornecer a **pose de referência** contra a qual a pose visual será comparada. Dessa forma, o dispositivo que o trabalho pretende, no longo prazo, substituir, cumpre no laboratório o papel de padrão-ouro de validação. A transformação entre o referencial do sistema de posicionamento e o referencial da câmera/peça deve ser cuidadosamente calibrada (calibração mão-olho, *hand-eye calibration*), sob pena de contaminar toda a avaliação com um erro sistemático de referencial.
+**Decisão de aparato (2026-09-01).** Não há *housing* submersível. A câmera permanece no ar, fixada em **tripé**, e filma o espécime e o marcador fiducial **submersos** através da parede transparente do tanque. A S600 não é submersível; esta é a geometria real das aquisições exploratórias de 27/05 e a geometria de todos os experimentos desta dissertação. Configurações de *flat port* em *housing* ficam registradas como analogia de literatura e como trabalho futuro de campo — **não** como o aparato do mestrado.
+
+```mermaid
+flowchart LR
+    Cam["Câmera S600 no tripé<br/>ar · 3840×2160@30"] --> Ar["ar<br/>distância d_cam medida"]
+    Ar --> Parede["parede do tanque<br/>espessura e índice medidos"]
+    Parede --> Agua["água · marcador e transdutor submersos"]
+```
+
+Os componentes do aparato:
+
+- **Tanque transparente.** Reservatório com água, paredes ópticas planas (vidro ou acrílico a documentar), dimensionado para acomodar a amostra de tubulação, o conjunto transdutor/braçadeira e o sistema de posicionamento. Documentar dimensões internas, **material e espessura da parede filmada**, índice de refração do material, e a face usada como janela (não trocar de parede entre sessões). Reflexos nas paredes são artefato esperado e devem ser catalogados, não tratados como ruído silencioso.
+- **Câmera no tripé, no ar.** EMEET SmartCam S600, modo único calibrado **3840×2160 @ 30 fps MJPEG**. Intrínsecos medidos em ar nesta bancada (Caliscope 0.11.3, 2026-09-01, RMSE 0,599 px, 30 quadros). O tripé permanece travado durante cada sessão e entre sessões de calibração refrativa: deslocamento da câmera altera `d_cam` e invalida o modelo refrativo. Autofoco desligado; o ajuste digital de FOV (40°–73°) não é alterado após a intrínseca. A calibração viaja como metadado; o vídeo é gravado cru.
+- **Cadeia óptica a medir (obrigatória antes da refrativa).** Distância lente–face externa da parede (`d_cam`); espessura da parede; índice de refração do material; ângulo entre o eixo óptico e a normal da parede (alvo: incidência ~normal). Sem esses valores não há WP1.2, só curva ajustada.
+- **Amostra de tubulação de aço.** Segmento representativo no interior do tanque, alvo geométrico da inspeção e referencial da peça. Idealmente com descontinuidades conhecidas (entalhes, furos de fundo plano) para avaliar o registro.
+- **Conjunto transdutor/braçadeira.** Transdutor ultrassônico na braçadeira, cujo CAD é conhecido e baseia os pontos-chave 3D. A braçadeira é o suporte dos marcadores fiduciais.
+- **Marcadores fiduciais submersos.** Tabuleiro(s) ChArUco (contrato do projeto: DICT_4X4_50, 7×5, 34,0 mm medidos) e/ou marcadores da braçadeira, **na água**, rígidos em relação ao transdutor. A transformação marcador→transdutor deve ser medida. Variante: marcadores ativos para mitigar *backscatter*.
+- **Iluminação.** Fonte controlada no ambiente do tanque. Iluminação frontal intensa aumenta *backscatter* na coluna d'água vista através da parede; iluminação lateral e marcadores ativos serão contrastados. Evitar reflexo especular da parede no campo da S600.
+- **Sistema de posicionamento e *ground truth*.** O sistema eletromecânico existente (scanner / encoder / cinemática conhecida) move o transdutor e fornece a pose de referência. A transformação entre o referencial do posicionador, o da câmera (no ar) e o da peça deve ser calibrada por mão-olho (`AX = XB`). Erro sistemático aqui contamina toda a avaliação.
+
+**Limitação explícita.** Este aparato valida visão **através da parede** em laboratório, não uma câmera submersa em ROV. A transposição para campo exige *housing* e nova calibração refrativa; isso é trabalho futuro (objetivo específico 7), não premissa oculta.
 
 ### 6.3. Controle de turbidez
 
@@ -181,7 +197,7 @@ A proporção e a estratégia de mistura entre essas fontes, bem como a partiç�
 - **Módulo de *keypoints* densos (estilo PVNet).** Definição dos pontos-chave 3D sobre o modelo CAD do conjunto (por exemplo, por seleção que maximize dispersão espacial); treinamento da rede para predizer, por pixel, os vetores de votação; votação robusta; PnP para recuperação da pose.
 - **Módulo fiducial (estilo Deep ChArUco).** Detecção dos pontos do tabuleiro ChArUco por rede dedicada, com refinamento subpixel dos cantos; PnP sobre os cantos, usando a geometria conhecida do tabuleiro e a transformação braçadeira→marcador.
 - **Fusão.** Combinação das duas estimativas de pose, ponderada por incerteza/confiança de cada fonte (por exemplo, priorizando o fiducial em turbidez extrema, quando disponível, e os *keypoints* densos sob oclusão do marcador). A formulação exata da fusão (seleção, média ponderada, filtragem temporal) será objeto de experimentação (H₁).
-- **Calibração refrativa.** Estimação dos parâmetros das interfaces refrativas e correção do modelo de projeção, aplicada previamente a ambos os módulos (H₂).
+- **Calibração refrativa.** Estimação dos parâmetros da cadeia ar–parede do tanque–água (distância câmera–parede, espessura, índice, normal) e correção do modelo de projeção, aplicada previamente a ambos os módulos (H₂). O controle experimental é o *pinhole* com a distorção intrínseca medida em ar.
 - **Realce de imagem (opcional).** Etapa de pré-processamento cuja ativação é variável de ablação.
 
 ### 6.7. Implementação do registro espacial 3D (Fase 2)
@@ -196,8 +212,8 @@ Os experimentos são formulados para testar, de maneira isolada e cumulativa, ca
 
 ### 7.1. Experimento 0 — Calibração e caracterização de linha de base
 
-**Objetivo.** Estabelecer a calibração intrínseca, a calibração refrativa e a calibração mão-olho (referencial da câmera ↔ referencial do sistema de posicionamento ↔ referencial da peça), e caracterizar o erro residual do sistema de referência.
-**Procedimento.** Aquisição de padrões de calibração sob água limpa; estimação dos parâmetros; quantificação do erro de reprojeção residual e do erro de fechamento da cadeia de referenciais.
+**Objetivo.** Estabelecer a calibração intrínseca em ar, a calibração refrativa da cadeia ar–parede–água (câmera no tripé, marcador na água) e a calibração mão-olho (referencial da câmera no ar ↔ referencial do sistema de posicionamento ↔ referencial da peça), e caracterizar o erro residual do sistema de referência.
+**Procedimento.** Intrínseca ChArUco em ar no modo 3840×2160 (já medida nesta bancada). Em seguida, com a câmera **fixa no tripé**, aquisição do padrão **submerso** visto através da parede; medição de `d_cam`, espessura e índice; estimação dos parâmetros refrativos; quantificação do erro de reprojeção residual **debaixo d'água** (isto é, através da parede) e do erro de fechamento da cadeia de referenciais.
 **Saída.** Parâmetros de calibração validados e um orçamento de erro (*error budget*) da referência, indispensável para interpretar corretamente todas as comparações subsequentes.
 
 ### 7.2. Experimento 1 — Detecção fiducial vs. *markerless* sob turbidez crescente
@@ -220,7 +236,7 @@ Os experimentos são formulados para testar, de maneira isolada e cumulativa, ca
 
 **Hipótese testada.** H₂.
 **Variáveis independentes.** Modelo de calibração (pinhole + distorção radial vs. modelo refrativo explícito).
-**Condições.** Trajetórias controladas em turbidez fixa (baixa/moderada), com pose de referência.
+**Condições.** Trajetórias controladas em turbidez fixa (baixa/moderada), câmera no tripé através da parede, com pose de referência.
 **Métricas.** Erro de translação e de rotação; erro de reprojeção.
 **Resultado esperado.** Redução estatisticamente significativa do erro métrico sob o modelo refrativo.
 
@@ -324,7 +340,8 @@ Etapas E2–E4 admitem paralelismo parcial (a geração sintética e a implement
 | Turbidez extrema inviabiliza a estimação *markerless* em faixas relevantes | Médio | Recorrer a marcadores fiduciais (inclusive ativos) nessas faixas; delimitar honestamente o envelope operacional como resultado |
 | Restrição de tempo do mestrado | Médio | Escopo já enxuto (Fase 2 restrita a registro); paralelizar E2–E4; priorizar publicação após E4 |
 | Disponibilidade de amostra com descontinuidades conhecidas para avaliar o registro | Médio | Planejar com antecedência a amostra (entalhes/furos usinados) junto à equipe do LASSIP (Kalid) |
-| Reflexões e artefatos ópticos nas paredes/janelas do tanque | Baixo–Médio | Documentar geometria do tanque; controlar iluminação; posicionar câmera para minimizar reflexos |
+| Reflexões e artefatos ópticos nas paredes do tanque (a câmera filma *através* delas) | Médio | Documentar material/espessura da parede usada; não trocar de face entre sessões; controlar iluminação; catalogar reflexos em vez de misturá-los às métricas |
+| Deslocamento do tripé entre sessões invalida a refrativa | Alto | Marcar posição do tripé; repetir medição de `d_cam` no início de cada sessão; se `d_cam` sair da tolerância, recalibrar a refrativa — não o `K` em ar |
 
 ---
 

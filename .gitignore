@@ -29,6 +29,12 @@ calibracao/capturas_validacao/
 calibracao/saida_teste/
 calibracao/saida/tabuleiro.png
 
+# Workspace Caliscope deste projeto: o TOML do tabuleiro fica versionado;
+# MP4s e recordings são insumo experimental.
+calibracao/caliscope-workspace/calibration/intrinsic/*.mp4
+calibracao/caliscope-workspace/calibration/extrinsic/*.mp4
+calibracao/caliscope-workspace/recordings/
+
 # Backups automáticos do importador (o arquivo vivo fica versionado)
 *.bak
 

@@ -1,0 +1,1512 @@
+{
+  "schema": {
+    "name": "pose.sessao_aquisicao",
+    "version": 2
+  },
+  "sessao_id": "20260901_165544_983",
+  "gerado_em": "2026-09-01T19:55:58.629+00:00",
+  "notas_do_operador": "",
+  "video": {
+    "arquivo": "video_20260901_165544_983.avi",
+    "sha256": "7d6c2205a1eb849d65c698e75343519b00915def7d12e93ed8e2de89834f1c4b",
+    "tamanho_bytes": 67453530,
+    "codec": "MJPG",
+    "n_quadros_na_tabela": 259,
+    "n_quadros_escritos": 259,
+    "descartados_por_fila": 0,
+    "pre_roll": {
+      "presente": true,
+      "inicio_monotonic_ns": 29579780890800,
+      "marcador_monotonic_ns": 29583934365400,
+      "duracao_ms": 4153.475,
+      "n_quadros_antes_do_marcador": 83,
+      "nota": "o escritor foi aberto e assinou a fonte antes de o listener global ser ativado; estes quadros são pré-roll real no próprio vídeo"
+    }
+  },
+  "calibracao": {
+    "perfil": "C:\\Users\\Rhayron\\Projects\\pose\\calibracao\\perfis_ativos\\s600.json",
+    "camera_key": "s600",
+    "image_size": [
+      3840,
+      2160
+    ],
+    "K": [
+      [
+        3119.7653658554414,
+        0.0,
+        1898.9289090289108
+      ],
+      [
+        0.0,
+        3121.6558995750993,
+        898.6103390118336
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "dist": [
+      0.1377737976423014,
+      -0.48117520235499106,
+      0.00302856287266917,
+      -0.0025003722277974244,
+      0.46868806675805835
+    ],
+    "focus_esperado": null,
+    "import_id": "db6cc2f219192aa33fbeb97e",
+    "activation_id": "8db5e0ec44b4d7a3ce8f23ac",
+    "transferencia": "validada",
+    "aviso": null
+  },
+  "camera": {
+    "indice": 0,
+    "modo_pedido": {
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "codec": "MJPG"
+    },
+    "modo_efetivo": {
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.00003000003,
+      "buffersize": -1.0,
+      "backend": "DSHOW",
+      "set_results": {
+        "codec": true,
+        "width": true,
+        "height": true,
+        "fps": true,
+        "buffersize": false
+      }
+    },
+    "props_antes_travar": {
+      "focus": 356.0,
+      "exposure": -3.0,
+      "autofocus": 1.0,
+      "auto_exposure": -1.0,
+      "gain": 0.0,
+      "zoom": null
+    },
+    "props_depois_da_sessao": {
+      "focus": 356.0,
+      "exposure": -3.0,
+      "autofocus": 2.0,
+      "auto_exposure": -1.0,
+      "gain": 0.0,
+      "zoom": null
+    },
+    "travas": {
+      "autofocus": {
+        "pedido": 0.0,
+        "set_retornou": true,
+        "lido": 2.0,
+        "obedecido": false,
+        "observavel": true
+      },
+      "auto_exposure": {
+        "pedido": 0.25,
+        "set_retornou": true,
+        "lido": -1.0,
+        "obedecido": false,
+        "observavel": false
+      }
+    },
+    "props_durante_a_sessao": {
+      "focus": {
+        "valores_observados": [
+          356.0
+        ],
+        "constante": true,
+        "n_amostras": 74
+      },
+      "exposure": {
+        "valores_observados": [
+          -3.0
+        ],
+        "constante": true,
+        "n_amostras": 74
+      },
+      "autofocus": {
+        "valores_observados": [
+          2.0
+        ],
+        "constante": true,
+        "n_amostras": 74
+      },
+      "auto_exposure": {
+        "valores_observados": [
+          -1.0
+        ],
+        "constante": true,
+        "n_amostras": 74
+      },
+      "gain": {
+        "valores_observados": [
+          0.0
+        ],
+        "constante": true,
+        "n_amostras": 74
+      },
+      "zoom": {
+        "valores_observados": [],
+        "constante": true,
+        "n_amostras": 74
+      }
+    },
+    "foco_contra_calibracao": {
+      "verificado": false,
+      "motivo": "perfil de calibração não informou o foco de referência",
+      "focus_observado": 356.0,
+      "focus_observados_na_sessao": [
+        356.0
+      ]
+    },
+    "estatisticas_temporais": {
+      "n_quadros": 1530,
+      "fps_medido": 20.7871,
+      "intervalo_mediano_ms": 48.1068,
+      "intervalo_p95_ms": 65.7351,
+      "intervalo_max_ms": 116.6922,
+      "jitter_rms_ms": 18.016,
+      "quadros_perdidos_estimados": 0
+    },
+    "relogio": {
+      "monotonic_ns_inicio": 29515916413600,
+      "wall_clock_utc_inicio_ns": 1788292481233007800,
+      "nota": "monotonic serve para medir intervalos (não salta com ajuste de relógio); wall clock serve só para ancorar a sessão numa data. Não misturar os dois no mesmo cálculo."
+    }
+  },
+  "sincronismo": {
+    "qualidade": {
+      "nivel": "grosseira",
+      "base": "apenas marcador de clique. Entre o clique e o primeiro disparo do pulser há latência do software proprietário, não medida aqui. Serve para alinhar trechos, NÃO para associar pose a A-scan individual.",
+      "incerteza_ms_estimada": null,
+      "latencia_pipeline_compensada": false,
+      "aviso_latencia": "latência do pipeline da câmera não medida nesta montagem. O carimbo é do instante de entrega pelo USB, não da exposição do sensor. Rode medir_latencia.py e passe o valor."
+    },
+    "marcador_clique": {
+      "monotonic_ns": 29583934365400,
+      "posicao_tela": {
+        "x": 2502,
+        "y": 238,
+        "botao": "Button.left"
+      },
+      "quadro_mais_proximo_na_captura": 1353,
+      "delta_para_esse_quadro_ms": -25.356,
+      "quadro_mais_proximo_no_video": 83,
+      "delta_para_quadro_no_video_ms": -25.356,
+      "significado": "instante em que o sistema operacional entregou o clique. NÃO é o instante do primeiro disparo do pulser."
+    },
+    "evento_luminoso": {
+      "detectado": false,
+      "motivo": "ROI de evento não configurada"
+    },
+    "latencia_pipeline_ms": null,
+    "roi_evento": null
+  },
+  "quadros": [
+    {
+      "i": 0,
+      "indice_fonte": 1270,
+      "monotonic_ns": 29579780890800
+    },
+    {
+      "i": 1,
+      "indice_fonte": 1271,
+      "monotonic_ns": 29579786534700
+    },
+    {
+      "i": 2,
+      "indice_fonte": 1272,
+      "monotonic_ns": 29579816063800
+    },
+    {
+      "i": 3,
+      "indice_fonte": 1273,
+      "monotonic_ns": 29579864172100
+    },
+    {
+      "i": 4,
+      "indice_fonte": 1274,
+      "monotonic_ns": 29579911905900
+    },
+    {
+      "i": 5,
+      "indice_fonte": 1275,
+      "monotonic_ns": 29579960135100
+    },
+    {
+      "i": 6,
+      "indice_fonte": 1276,
+      "monotonic_ns": 29580024543400
+    },
+    {
+      "i": 7,
+      "indice_fonte": 1277,
+      "monotonic_ns": 29580071287700
+    },
+    {
+      "i": 8,
+      "indice_fonte": 1278,
+      "monotonic_ns": 29580119394500
+    },
+    {
+      "i": 9,
+      "indice_fonte": 1279,
+      "monotonic_ns": 29580167655300
+    },
+    {
+      "i": 10,
+      "indice_fonte": 1280,
+      "monotonic_ns": 29580215410400
+    },
+    {
+      "i": 11,
+      "indice_fonte": 1281,
+      "monotonic_ns": 29580264813500
+    },
+    {
+      "i": 12,
+      "indice_fonte": 1282,
+      "monotonic_ns": 29580311569600
+    },
+    {
+      "i": 13,
+      "indice_fonte": 1283,
+      "monotonic_ns": 29580375403400
+    },
+    {
+      "i": 14,
+      "indice_fonte": 1284,
+      "monotonic_ns": 29580424090700
+    },
+    {
+      "i": 15,
+      "indice_fonte": 1285,
+      "monotonic_ns": 29580471308000
+    },
+    {
+      "i": 16,
+      "indice_fonte": 1286,
+      "monotonic_ns": 29580519640400
+    },
+    {
+      "i": 17,
+      "indice_fonte": 1287,
+      "monotonic_ns": 29580568338100
+    },
+    {
+      "i": 18,
+      "indice_fonte": 1288,
+      "monotonic_ns": 29580615438100
+    },
+    {
+      "i": 19,
+      "indice_fonte": 1289,
+      "monotonic_ns": 29580663515000
+    },
+    {
+      "i": 20,
+      "indice_fonte": 1290,
+      "monotonic_ns": 29580727680700
+    },
+    {
+      "i": 21,
+      "indice_fonte": 1291,
+      "monotonic_ns": 29580838887600
+    },
+    {
+      "i": 22,
+      "indice_fonte": 1292,
+      "monotonic_ns": 29580843938400
+    },
+    {
+      "i": 23,
+      "indice_fonte": 1293,
+      "monotonic_ns": 29580872899300
+    },
+    {
+      "i": 24,
+      "indice_fonte": 1294,
+      "monotonic_ns": 29580920572900
+    },
+    {
+      "i": 25,
+      "indice_fonte": 1295,
+      "monotonic_ns": 29580967642900
+    },
+    {
+      "i": 26,
+      "indice_fonte": 1296,
+      "monotonic_ns": 29581016381800
+    },
+    {
+      "i": 27,
+      "indice_fonte": 1297,
+      "monotonic_ns": 29581080487100
+    },
+    {
+      "i": 28,
+      "indice_fonte": 1298,
+      "monotonic_ns": 29581127073300
+    },
+    {
+      "i": 29,
+      "indice_fonte": 1299,
+      "monotonic_ns": 29581176406800
+    },
+    {
+      "i": 30,
+      "indice_fonte": 1300,
+      "monotonic_ns": 29581223627000
+    },
+    {
+      "i": 31,
+      "indice_fonte": 1301,
+      "monotonic_ns": 29581271933500
+    },
+    {
+      "i": 32,
+      "indice_fonte": 1302,
+      "monotonic_ns": 29581319510800
+    },
+    {
+      "i": 33,
+      "indice_fonte": 1303,
+      "monotonic_ns": 29581367739300
+    },
+    {
+      "i": 34,
+      "indice_fonte": 1304,
+      "monotonic_ns": 29581431287200
+    },
+    {
+      "i": 35,
+      "indice_fonte": 1305,
+      "monotonic_ns": 29581479541500
+    },
+    {
+      "i": 36,
+      "indice_fonte": 1306,
+      "monotonic_ns": 29581527473300
+    },
+    {
+      "i": 37,
+      "indice_fonte": 1307,
+      "monotonic_ns": 29581575904500
+    },
+    {
+      "i": 38,
+      "indice_fonte": 1308,
+      "monotonic_ns": 29581623900200
+    },
+    {
+      "i": 39,
+      "indice_fonte": 1309,
+      "monotonic_ns": 29581671575400
+    },
+    {
+      "i": 40,
+      "indice_fonte": 1310,
+      "monotonic_ns": 29581719514000
+    },
+    {
+      "i": 41,
+      "indice_fonte": 1311,
+      "monotonic_ns": 29581783175500
+    },
+    {
+      "i": 42,
+      "indice_fonte": 1312,
+      "monotonic_ns": 29581895810600
+    },
+    {
+      "i": 43,
+      "indice_fonte": 1313,
+      "monotonic_ns": 29581901971100
+    },
+    {
+      "i": 44,
+      "indice_fonte": 1314,
+      "monotonic_ns": 29581928201000
+    },
+    {
+      "i": 45,
+      "indice_fonte": 1315,
+      "monotonic_ns": 29581976198400
+    },
+    {
+      "i": 46,
+      "indice_fonte": 1316,
+      "monotonic_ns": 29582023341900
+    },
+    {
+      "i": 47,
+      "indice_fonte": 1317,
+      "monotonic_ns": 29582071194700
+    },
+    {
+      "i": 48,
+      "indice_fonte": 1318,
+      "monotonic_ns": 29582135437500
+    },
+    {
+      "i": 49,
+      "indice_fonte": 1319,
+      "monotonic_ns": 29582183274300
+    },
+    {
+      "i": 50,
+      "indice_fonte": 1320,
+      "monotonic_ns": 29582230403800
+    },
+    {
+      "i": 51,
+      "indice_fonte": 1321,
+      "monotonic_ns": 29582278854300
+    },
+    {
+      "i": 52,
+      "indice_fonte": 1322,
+      "monotonic_ns": 29582328674000
+    },
+    {
+      "i": 53,
+      "indice_fonte": 1323,
+      "monotonic_ns": 29582375247300
+    },
+    {
+      "i": 54,
+      "indice_fonte": 1324,
+      "monotonic_ns": 29582438963100
+    },
+    {
+      "i": 55,
+      "indice_fonte": 1325,
+      "monotonic_ns": 29582487326100
+    },
+    {
+      "i": 56,
+      "indice_fonte": 1326,
+      "monotonic_ns": 29582536591700
+    },
+    {
+      "i": 57,
+      "indice_fonte": 1327,
+      "monotonic_ns": 29582583947100
+    },
+    {
+      "i": 58,
+      "indice_fonte": 1328,
+      "monotonic_ns": 29582631600800
+    },
+    {
+      "i": 59,
+      "indice_fonte": 1329,
+      "monotonic_ns": 29582679031500
+    },
+    {
+      "i": 60,
+      "indice_fonte": 1330,
+      "monotonic_ns": 29582726873900
+    },
+    {
+      "i": 61,
+      "indice_fonte": 1331,
+      "monotonic_ns": 29582792779400
+    },
+    {
+      "i": 62,
+      "indice_fonte": 1332,
+      "monotonic_ns": 29582898737600
+    },
+    {
+      "i": 63,
+      "indice_fonte": 1333,
+      "monotonic_ns": 29582904173600
+    },
+    {
+      "i": 64,
+      "indice_fonte": 1334,
+      "monotonic_ns": 29582936486200
+    },
+    {
+      "i": 65,
+      "indice_fonte": 1335,
+      "monotonic_ns": 29582983864100
+    },
+    {
+      "i": 66,
+      "indice_fonte": 1336,
+      "monotonic_ns": 29583031722100
+    },
+    {
+      "i": 67,
+      "indice_fonte": 1337,
+      "monotonic_ns": 29583079857900
+    },
+    {
+      "i": 68,
+      "indice_fonte": 1338,
+      "monotonic_ns": 29583143733000
+    },
+    {
+      "i": 69,
+      "indice_fonte": 1339,
+      "monotonic_ns": 29583191695600
+    },
+    {
+      "i": 70,
+      "indice_fonte": 1340,
+      "monotonic_ns": 29583239236400
+    },
+    {
+      "i": 71,
+      "indice_fonte": 1341,
+      "monotonic_ns": 29583287221700
+    },
+    {
+      "i": 72,
+      "indice_fonte": 1342,
+      "monotonic_ns": 29583335568600
+    },
+    {
+      "i": 73,
+      "indice_fonte": 1343,
+      "monotonic_ns": 29583382670200
+    },
+    {
+      "i": 74,
+      "indice_fonte": 1344,
+      "monotonic_ns": 29583431807200
+    },
+    {
+      "i": 75,
+      "indice_fonte": 1345,
+      "monotonic_ns": 29583495032800
+    },
+    {
+      "i": 76,
+      "indice_fonte": 1346,
+      "monotonic_ns": 29583543282500
+    },
+    {
+      "i": 77,
+      "indice_fonte": 1347,
+      "monotonic_ns": 29583591968100
+    },
+    {
+      "i": 78,
+      "indice_fonte": 1348,
+      "monotonic_ns": 29583638400800
+    },
+    {
+      "i": 79,
+      "indice_fonte": 1349,
+      "monotonic_ns": 29583687097500
+    },
+    {
+      "i": 80,
+      "indice_fonte": 1350,
+      "monotonic_ns": 29583734570700
+    },
+    {
+      "i": 81,
+      "indice_fonte": 1351,
+      "monotonic_ns": 29583782882700
+    },
+    {
+      "i": 82,
+      "indice_fonte": 1352,
+      "monotonic_ns": 29583847868400
+    },
+    {
+      "i": 83,
+      "indice_fonte": 1353,
+      "monotonic_ns": 29583959721000
+    },
+    {
+      "i": 84,
+      "indice_fonte": 1354,
+      "monotonic_ns": 29583966254100
+    },
+    {
+      "i": 85,
+      "indice_fonte": 1355,
+      "monotonic_ns": 29583999506700
+    },
+    {
+      "i": 86,
+      "indice_fonte": 1356,
+      "monotonic_ns": 29584052105700
+    },
+    {
+      "i": 87,
+      "indice_fonte": 1357,
+      "monotonic_ns": 29584094744300
+    },
+    {
+      "i": 88,
+      "indice_fonte": 1358,
+      "monotonic_ns": 29584143013100
+    },
+    {
+      "i": 89,
+      "indice_fonte": 1359,
+      "monotonic_ns": 29584207490600
+    },
+    {
+      "i": 90,
+      "indice_fonte": 1360,
+      "monotonic_ns": 29584258018800
+    },
+    {
+      "i": 91,
+      "indice_fonte": 1361,
+      "monotonic_ns": 29584303171800
+    },
+    {
+      "i": 92,
+      "indice_fonte": 1362,
+      "monotonic_ns": 29584350388400
+    },
+    {
+      "i": 93,
+      "indice_fonte": 1363,
+      "monotonic_ns": 29584400093900
+    },
+    {
+      "i": 94,
+      "indice_fonte": 1364,
+      "monotonic_ns": 29584442109100
+    },
+    {
+      "i": 95,
+      "indice_fonte": 1365,
+      "monotonic_ns": 29584489659200
+    },
+    {
+      "i": 96,
+      "indice_fonte": 1366,
+      "monotonic_ns": 29584551963700
+    },
+    {
+      "i": 97,
+      "indice_fonte": 1367,
+      "monotonic_ns": 29584605485300
+    },
+    {
+      "i": 98,
+      "indice_fonte": 1368,
+      "monotonic_ns": 29584654164100
+    },
+    {
+      "i": 99,
+      "indice_fonte": 1369,
+      "monotonic_ns": 29584701704500
+    },
+    {
+      "i": 100,
+      "indice_fonte": 1370,
+      "monotonic_ns": 29584745912500
+    },
+    {
+      "i": 101,
+      "indice_fonte": 1371,
+      "monotonic_ns": 29584797775100
+    },
+    {
+      "i": 102,
+      "indice_fonte": 1372,
+      "monotonic_ns": 29584845925400
+    },
+    {
+      "i": 103,
+      "indice_fonte": 1373,
+      "monotonic_ns": 29584908472800
+    },
+    {
+      "i": 104,
+      "indice_fonte": 1374,
+      "monotonic_ns": 29585020644700
+    },
+    {
+      "i": 105,
+      "indice_fonte": 1375,
+      "monotonic_ns": 29585026296200
+    },
+    {
+      "i": 106,
+      "indice_fonte": 1376,
+      "monotonic_ns": 29585052345600
+    },
+    {
+      "i": 107,
+      "indice_fonte": 1377,
+      "monotonic_ns": 29585099302900
+    },
+    {
+      "i": 108,
+      "indice_fonte": 1378,
+      "monotonic_ns": 29585145701500
+    },
+    {
+      "i": 109,
+      "indice_fonte": 1379,
+      "monotonic_ns": 29585193308900
+    },
+    {
+      "i": 110,
+      "indice_fonte": 1380,
+      "monotonic_ns": 29585256086400
+    },
+    {
+      "i": 111,
+      "indice_fonte": 1381,
+      "monotonic_ns": 29585302747400
+    },
+    {
+      "i": 112,
+      "indice_fonte": 1382,
+      "monotonic_ns": 29585357364800
+    },
+    {
+      "i": 113,
+      "indice_fonte": 1383,
+      "monotonic_ns": 29585398761100
+    },
+    {
+      "i": 114,
+      "indice_fonte": 1384,
+      "monotonic_ns": 29585449243900
+    },
+    {
+      "i": 115,
+      "indice_fonte": 1385,
+      "monotonic_ns": 29585502487200
+    },
+    {
+      "i": 116,
+      "indice_fonte": 1386,
+      "monotonic_ns": 29585543493500
+    },
+    {
+      "i": 117,
+      "indice_fonte": 1387,
+      "monotonic_ns": 29585608407400
+    },
+    {
+      "i": 118,
+      "indice_fonte": 1388,
+      "monotonic_ns": 29585655396700
+    },
+    {
+      "i": 119,
+      "indice_fonte": 1389,
+      "monotonic_ns": 29585704810200
+    },
+    {
+      "i": 120,
+      "indice_fonte": 1390,
+      "monotonic_ns": 29585752743700
+    },
+    {
+      "i": 121,
+      "indice_fonte": 1391,
+      "monotonic_ns": 29585801053200
+    },
+    {
+      "i": 122,
+      "indice_fonte": 1392,
+      "monotonic_ns": 29585852268300
+    },
+    {
+      "i": 123,
+      "indice_fonte": 1393,
+      "monotonic_ns": 29585901064800
+    },
+    {
+      "i": 124,
+      "indice_fonte": 1394,
+      "monotonic_ns": 29585960992600
+    },
+    {
+      "i": 125,
+      "indice_fonte": 1395,
+      "monotonic_ns": 29586065579500
+    },
+    {
+      "i": 126,
+      "indice_fonte": 1396,
+      "monotonic_ns": 29586071468000
+    },
+    {
+      "i": 127,
+      "indice_fonte": 1397,
+      "monotonic_ns": 29586109816200
+    },
+    {
+      "i": 128,
+      "indice_fonte": 1398,
+      "monotonic_ns": 29586152297000
+    },
+    {
+      "i": 129,
+      "indice_fonte": 1399,
+      "monotonic_ns": 29586201542400
+    },
+    {
+      "i": 130,
+      "indice_fonte": 1400,
+      "monotonic_ns": 29586252782700
+    },
+    {
+      "i": 131,
+      "indice_fonte": 1401,
+      "monotonic_ns": 29586312555700
+    },
+    {
+      "i": 132,
+      "indice_fonte": 1402,
+      "monotonic_ns": 29586359090300
+    },
+    {
+      "i": 133,
+      "indice_fonte": 1403,
+      "monotonic_ns": 29586407124500
+    },
+    {
+      "i": 134,
+      "indice_fonte": 1404,
+      "monotonic_ns": 29586455348000
+    },
+    {
+      "i": 135,
+      "indice_fonte": 1405,
+      "monotonic_ns": 29586507596800
+    },
+    {
+      "i": 136,
+      "indice_fonte": 1406,
+      "monotonic_ns": 29586557403300
+    },
+    {
+      "i": 137,
+      "indice_fonte": 1407,
+      "monotonic_ns": 29586605802400
+    },
+    {
+      "i": 138,
+      "indice_fonte": 1408,
+      "monotonic_ns": 29586663623100
+    },
+    {
+      "i": 139,
+      "indice_fonte": 1409,
+      "monotonic_ns": 29586710902800
+    },
+    {
+      "i": 140,
+      "indice_fonte": 1410,
+      "monotonic_ns": 29586761347200
+    },
+    {
+      "i": 141,
+      "indice_fonte": 1411,
+      "monotonic_ns": 29586812832200
+    },
+    {
+      "i": 142,
+      "indice_fonte": 1412,
+      "monotonic_ns": 29586861089100
+    },
+    {
+      "i": 143,
+      "indice_fonte": 1413,
+      "monotonic_ns": 29586909053900
+    },
+    {
+      "i": 144,
+      "indice_fonte": 1414,
+      "monotonic_ns": 29586959405500
+    },
+    {
+      "i": 145,
+      "indice_fonte": 1415,
+      "monotonic_ns": 29587014967000
+    },
+    {
+      "i": 146,
+      "indice_fonte": 1416,
+      "monotonic_ns": 29587129534000
+    },
+    {
+      "i": 147,
+      "indice_fonte": 1417,
+      "monotonic_ns": 29587135742300
+    },
+    {
+      "i": 148,
+      "indice_fonte": 1418,
+      "monotonic_ns": 29587163443500
+    },
+    {
+      "i": 149,
+      "indice_fonte": 1419,
+      "monotonic_ns": 29587211754000
+    },
+    {
+      "i": 150,
+      "indice_fonte": 1420,
+      "monotonic_ns": 29587262651500
+    },
+    {
+      "i": 151,
+      "indice_fonte": 1421,
+      "monotonic_ns": 29587309878600
+    },
+    {
+      "i": 152,
+      "indice_fonte": 1422,
+      "monotonic_ns": 29587373904200
+    },
+    {
+      "i": 153,
+      "indice_fonte": 1423,
+      "monotonic_ns": 29587416393200
+    },
+    {
+      "i": 154,
+      "indice_fonte": 1424,
+      "monotonic_ns": 29587465911900
+    },
+    {
+      "i": 155,
+      "indice_fonte": 1425,
+      "monotonic_ns": 29587511293100
+    },
+    {
+      "i": 156,
+      "indice_fonte": 1426,
+      "monotonic_ns": 29587560172400
+    },
+    {
+      "i": 157,
+      "indice_fonte": 1427,
+      "monotonic_ns": 29587607047000
+    },
+    {
+      "i": 158,
+      "indice_fonte": 1428,
+      "monotonic_ns": 29587657045100
+    },
+    {
+      "i": 159,
+      "indice_fonte": 1429,
+      "monotonic_ns": 29587721020400
+    },
+    {
+      "i": 160,
+      "indice_fonte": 1430,
+      "monotonic_ns": 29587767236800
+    },
+    {
+      "i": 161,
+      "indice_fonte": 1431,
+      "monotonic_ns": 29587816847800
+    },
+    {
+      "i": 162,
+      "indice_fonte": 1432,
+      "monotonic_ns": 29587869653200
+    },
+    {
+      "i": 163,
+      "indice_fonte": 1433,
+      "monotonic_ns": 29587918116300
+    },
+    {
+      "i": 164,
+      "indice_fonte": 1434,
+      "monotonic_ns": 29587960566200
+    },
+    {
+      "i": 165,
+      "indice_fonte": 1435,
+      "monotonic_ns": 29588022933700
+    },
+    {
+      "i": 166,
+      "indice_fonte": 1436,
+      "monotonic_ns": 29588136470700
+    },
+    {
+      "i": 167,
+      "indice_fonte": 1437,
+      "monotonic_ns": 29588142140200
+    },
+    {
+      "i": 168,
+      "indice_fonte": 1438,
+      "monotonic_ns": 29588168704300
+    },
+    {
+      "i": 169,
+      "indice_fonte": 1439,
+      "monotonic_ns": 29588215921300
+    },
+    {
+      "i": 170,
+      "indice_fonte": 1440,
+      "monotonic_ns": 29588265312000
+    },
+    {
+      "i": 171,
+      "indice_fonte": 1441,
+      "monotonic_ns": 29588311365400
+    },
+    {
+      "i": 172,
+      "indice_fonte": 1442,
+      "monotonic_ns": 29588377690600
+    },
+    {
+      "i": 173,
+      "indice_fonte": 1443,
+      "monotonic_ns": 29588429860100
+    },
+    {
+      "i": 174,
+      "indice_fonte": 1444,
+      "monotonic_ns": 29588472256700
+    },
+    {
+      "i": 175,
+      "indice_fonte": 1445,
+      "monotonic_ns": 29588526159400
+    },
+    {
+      "i": 176,
+      "indice_fonte": 1446,
+      "monotonic_ns": 29588567610900
+    },
+    {
+      "i": 177,
+      "indice_fonte": 1447,
+      "monotonic_ns": 29588616603500
+    },
+    {
+      "i": 178,
+      "indice_fonte": 1448,
+      "monotonic_ns": 29588663583800
+    },
+    {
+      "i": 179,
+      "indice_fonte": 1449,
+      "monotonic_ns": 29588727980900
+    },
+    {
+      "i": 180,
+      "indice_fonte": 1450,
+      "monotonic_ns": 29588782102500
+    },
+    {
+      "i": 181,
+      "indice_fonte": 1451,
+      "monotonic_ns": 29588830266500
+    },
+    {
+      "i": 182,
+      "indice_fonte": 1452,
+      "monotonic_ns": 29588873486400
+    },
+    {
+      "i": 183,
+      "indice_fonte": 1453,
+      "monotonic_ns": 29588919140000
+    },
+    {
+      "i": 184,
+      "indice_fonte": 1454,
+      "monotonic_ns": 29588968244000
+    },
+    {
+      "i": 185,
+      "indice_fonte": 1455,
+      "monotonic_ns": 29589022369100
+    },
+    {
+      "i": 186,
+      "indice_fonte": 1456,
+      "monotonic_ns": 29589082354800
+    },
+    {
+      "i": 187,
+      "indice_fonte": 1457,
+      "monotonic_ns": 29589198420300
+    },
+    {
+      "i": 188,
+      "indice_fonte": 1458,
+      "monotonic_ns": 29589204358000
+    },
+    {
+      "i": 189,
+      "indice_fonte": 1459,
+      "monotonic_ns": 29589228480700
+    },
+    {
+      "i": 190,
+      "indice_fonte": 1460,
+      "monotonic_ns": 29589278912700
+    },
+    {
+      "i": 191,
+      "indice_fonte": 1461,
+      "monotonic_ns": 29589323623700
+    },
+    {
+      "i": 192,
+      "indice_fonte": 1462,
+      "monotonic_ns": 29589374412900
+    },
+    {
+      "i": 193,
+      "indice_fonte": 1463,
+      "monotonic_ns": 29589437468300
+    },
+    {
+      "i": 194,
+      "indice_fonte": 1464,
+      "monotonic_ns": 29589485983900
+    },
+    {
+      "i": 195,
+      "indice_fonte": 1465,
+      "monotonic_ns": 29589534878500
+    },
+    {
+      "i": 196,
+      "indice_fonte": 1466,
+      "monotonic_ns": 29589582609300
+    },
+    {
+      "i": 197,
+      "indice_fonte": 1467,
+      "monotonic_ns": 29589625612700
+    },
+    {
+      "i": 198,
+      "indice_fonte": 1468,
+      "monotonic_ns": 29589677774200
+    },
+    {
+      "i": 199,
+      "indice_fonte": 1469,
+      "monotonic_ns": 29589726506500
+    },
+    {
+      "i": 200,
+      "indice_fonte": 1470,
+      "monotonic_ns": 29589784228100
+    },
+    {
+      "i": 201,
+      "indice_fonte": 1471,
+      "monotonic_ns": 29589837958100
+    },
+    {
+      "i": 202,
+      "indice_fonte": 1472,
+      "monotonic_ns": 29589885430800
+    },
+    {
+      "i": 203,
+      "indice_fonte": 1473,
+      "monotonic_ns": 29589934247000
+    },
+    {
+      "i": 204,
+      "indice_fonte": 1474,
+      "monotonic_ns": 29589983797300
+    },
+    {
+      "i": 205,
+      "indice_fonte": 1475,
+      "monotonic_ns": 29590028392600
+    },
+    {
+      "i": 206,
+      "indice_fonte": 1476,
+      "monotonic_ns": 29590077218200
+    },
+    {
+      "i": 207,
+      "indice_fonte": 1477,
+      "monotonic_ns": 29590137729800
+    },
+    {
+      "i": 208,
+      "indice_fonte": 1478,
+      "monotonic_ns": 29590254422000
+    },
+    {
+      "i": 209,
+      "indice_fonte": 1479,
+      "monotonic_ns": 29590260235700
+    },
+    {
+      "i": 210,
+      "indice_fonte": 1480,
+      "monotonic_ns": 29590284521300
+    },
+    {
+      "i": 211,
+      "indice_fonte": 1481,
+      "monotonic_ns": 29590328188200
+    },
+    {
+      "i": 212,
+      "indice_fonte": 1482,
+      "monotonic_ns": 29590381687900
+    },
+    {
+      "i": 213,
+      "indice_fonte": 1483,
+      "monotonic_ns": 29590431496800
+    },
+    {
+      "i": 214,
+      "indice_fonte": 1484,
+      "monotonic_ns": 29590488258600
+    },
+    {
+      "i": 215,
+      "indice_fonte": 1485,
+      "monotonic_ns": 29590538298300
+    },
+    {
+      "i": 216,
+      "indice_fonte": 1486,
+      "monotonic_ns": 29590583700900
+    },
+    {
+      "i": 217,
+      "indice_fonte": 1487,
+      "monotonic_ns": 29590633590000
+    },
+    {
+      "i": 218,
+      "indice_fonte": 1488,
+      "monotonic_ns": 29590679148100
+    },
+    {
+      "i": 219,
+      "indice_fonte": 1489,
+      "monotonic_ns": 29590728652100
+    },
+    {
+      "i": 220,
+      "indice_fonte": 1490,
+      "monotonic_ns": 29590782643400
+    },
+    {
+      "i": 221,
+      "indice_fonte": 1491,
+      "monotonic_ns": 29590842682100
+    },
+    {
+      "i": 222,
+      "indice_fonte": 1492,
+      "monotonic_ns": 29590894435100
+    },
+    {
+      "i": 223,
+      "indice_fonte": 1493,
+      "monotonic_ns": 29590937492200
+    },
+    {
+      "i": 224,
+      "indice_fonte": 1494,
+      "monotonic_ns": 29590986237700
+    },
+    {
+      "i": 225,
+      "indice_fonte": 1495,
+      "monotonic_ns": 29591038036800
+    },
+    {
+      "i": 226,
+      "indice_fonte": 1496,
+      "monotonic_ns": 29591086450900
+    },
+    {
+      "i": 227,
+      "indice_fonte": 1497,
+      "monotonic_ns": 29591129067500
+    },
+    {
+      "i": 228,
+      "indice_fonte": 1498,
+      "monotonic_ns": 29591191847000
+    },
+    {
+      "i": 229,
+      "indice_fonte": 1499,
+      "monotonic_ns": 29591306425000
+    },
+    {
+      "i": 230,
+      "indice_fonte": 1500,
+      "monotonic_ns": 29591312466700
+    },
+    {
+      "i": 231,
+      "indice_fonte": 1501,
+      "monotonic_ns": 29591338402000
+    },
+    {
+      "i": 232,
+      "indice_fonte": 1502,
+      "monotonic_ns": 29591390371100
+    },
+    {
+      "i": 233,
+      "indice_fonte": 1503,
+      "monotonic_ns": 29591436926100
+    },
+    {
+      "i": 234,
+      "indice_fonte": 1504,
+      "monotonic_ns": 29591485494800
+    },
+    {
+      "i": 235,
+      "indice_fonte": 1505,
+      "monotonic_ns": 29591548998000
+    },
+    {
+      "i": 236,
+      "indice_fonte": 1506,
+      "monotonic_ns": 29591598948300
+    },
+    {
+      "i": 237,
+      "indice_fonte": 1507,
+      "monotonic_ns": 29591646785800
+    },
+    {
+      "i": 238,
+      "indice_fonte": 1508,
+      "monotonic_ns": 29591694609700
+    },
+    {
+      "i": 239,
+      "indice_fonte": 1509,
+      "monotonic_ns": 29591737682500
+    },
+    {
+      "i": 240,
+      "indice_fonte": 1510,
+      "monotonic_ns": 29591789992000
+    },
+    {
+      "i": 241,
+      "indice_fonte": 1511,
+      "monotonic_ns": 29591836925800
+    },
+    {
+      "i": 242,
+      "indice_fonte": 1512,
+      "monotonic_ns": 29591902255500
+    },
+    {
+      "i": 243,
+      "indice_fonte": 1513,
+      "monotonic_ns": 29591946061000
+    },
+    {
+      "i": 244,
+      "indice_fonte": 1514,
+      "monotonic_ns": 29591996809900
+    },
+    {
+      "i": 245,
+      "indice_fonte": 1515,
+      "monotonic_ns": 29592041400600
+    },
+    {
+      "i": 246,
+      "indice_fonte": 1516,
+      "monotonic_ns": 29592087011100
+    },
+    {
+      "i": 247,
+      "indice_fonte": 1517,
+      "monotonic_ns": 29592135824700
+    },
+    {
+      "i": 248,
+      "indice_fonte": 1518,
+      "monotonic_ns": 29592184018500
+    },
+    {
+      "i": 249,
+      "indice_fonte": 1519,
+      "monotonic_ns": 29592250148800
+    },
+    {
+      "i": 250,
+      "indice_fonte": 1520,
+      "monotonic_ns": 29592358336700
+    },
+    {
+      "i": 251,
+      "indice_fonte": 1521,
+      "monotonic_ns": 29592363883500
+    },
+    {
+      "i": 252,
+      "indice_fonte": 1522,
+      "monotonic_ns": 29592398276300
+    },
+    {
+      "i": 253,
+      "indice_fonte": 1523,
+      "monotonic_ns": 29592440931800
+    },
+    {
+      "i": 254,
+      "indice_fonte": 1524,
+      "monotonic_ns": 29592488448100
+    },
+    {
+      "i": 255,
+      "indice_fonte": 1525,
+      "monotonic_ns": 29592535357200
+    },
+    {
+      "i": 256,
+      "indice_fonte": 1526,
+      "monotonic_ns": 29592599033200
+    },
+    {
+      "i": 257,
+      "indice_fonte": 1527,
+      "monotonic_ns": 29592646844500
+    },
+    {
+      "i": 258,
+      "indice_fonte": 1528,
+      "monotonic_ns": 29592696049600
+    }
+  ],
+  "limitacoes": [
+    "O carimbo de cada quadro é o instante de entrega pelo driver, não o instante de exposição do sensor. A diferença é a latência de pipeline; meça com medir_latencia.py e informe o valor.",
+    "O marcador de clique não é o início da aquisição de ultrassom: é o início do processamento do clique pelo software proprietário.",
+    "Nenhum número aqui é métrico. Converter pixel em milímetro exige o perfil de calibração e, para o tanque, a calibração refrativa."
+  ]
+}

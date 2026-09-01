@@ -120,7 +120,7 @@ Aproveita os 13 vídeos exploratórios de 27/05 **sem esperar por GT**: eles ser
 O elemento metodologicamente crítico. Nada de aquisição com GT antes de fechar este WP.
 
 1. **Calibração intrínseca em ar** (padrão ChArUco; ≥ 30 vistas; erro de reprojeção alvo < 0,3 px).
-2. **Calibração refrativa** (flat port): implementar/adaptar modelo de ray-tracing pelas interfaces ar–vidro–água; avaliar a ferramenta de Seegräber et al. (2025) antes de implementar do zero (*build vs. buy* — decisão registrada em ADR). Comparar contra pinhole+distorção como controle (insumo direto de H₂/Exp. 3).
+2. **Calibração refrativa** (câmera no ar, parede do tanque, alvo na água): ray-tracing ar–parede–água com `d_cam`, espessura e índice **medidos**; avaliar a ferramenta de Seegräber et al. (2025) antes de implementar do zero (*build vs. buy* — ADR). Não tratar como *flat port* de *housing*. Comparar contra pinhole+distorção em ar como controle (insumo direto de H₂/Exp. 3).
 3. **Calibração mão-olho** (`AX = XB`): transformação scanner↔câmera↔peça; medir **erro de fechamento de cadeia** repetindo a calibração em N sessões.
 4. **Orçamento de erro da referência**: documento formal com incerteza de cada elo (encoder, hand-eye, refração residual). *Toda comparação futura será interpretada contra este orçamento — diferenças menores que o erro da referência não são evidência.*
 5. **Sincronização temporal** câmera ↔ scanner: definir mecanismo (trigger de hardware, LED de sincronismo visível no quadro, ou timestamp comum) e medir a latência residual.

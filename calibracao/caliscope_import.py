@@ -679,13 +679,18 @@ def importar_intrinsecos(
             "passed": passed,
         },
         "transferencia": {
-            "status": "nao_validada",
-            "motivo": (
-                "K medido em outro projeto (vrchat, 2026-08-05). Reaproveitar e "
-                "hipotese, nao dado. Rode validar_transferencia.py na bancada do "
-                "pose para medir reprojecao com K congelado antes de usar."
+            "status": str(
+                (config.get("origem") or {}).get("transferencia_status")
+                or "nao_validada"
             ),
-            "evidencia": None,
+            "motivo": str(
+                (config.get("origem") or {}).get("transferencia_motivo")
+                or (
+                    "K medido em outro projeto. Reaproveitar e hipotese, nao dado. "
+                    "Rode validar_transferencia.py na bancada com K congelado."
+                )
+            ),
+            "evidencia": (config.get("origem") or {}).get("transferencia_evidencia"),
         },
         "external_boundary": {
             "kind": "caliscope_intrinsic_import",
