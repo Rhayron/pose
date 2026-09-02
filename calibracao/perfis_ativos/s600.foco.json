@@ -1,0 +1,16 @@
+{
+  "schema": {
+    "name": "pose.foco_referencia",
+    "version": 1
+  },
+  "camera_key": "s600",
+  "focus_esperado": 356.0,
+  "proveniencia": {
+    "lido_em": "sessão de aquisição 20260901_165544_983 (2026-09-01)",
+    "como": "CAP_PROP_FOCUS via DirectShow, constante em 356.0 por 74 amostras ao longo da sessão inteira",
+    "assuncao": "356.0 NÃO foi lido durante a captura da calibração (gravar_preview_s600.py não registra foco). É o foco observado na mesma bancada, um dia depois, com a trava de autofoco ativa. Se a nitidez do tabuleiro ou a distância de trabalho mudarem, este valor deixa de valer.",
+    "como_revalidar": "rodar validar_transferencia.py com o foco travado neste valor; se aprovar, K e este foco descrevem a mesma câmera",
+    "registrado_por": "correção do gate de autofoco, 2026-09-02"
+  },
+  "nota": "Este arquivo é deliberadamente NÃO selado: o perfil ativo tem digest de integridade e não pode receber campos novos sem re-selagem. A sessão registra a origem deste valor em calibracao.focus_esperado_origem."
+}

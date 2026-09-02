@@ -192,6 +192,7 @@ class App:
         self._fechar_apos_salvar = False
 
         self.roi = tuple(args.roi) if args.roi else None
+        self._verificacao_af: threading.Thread | None = None
 
         self._montar()
         self.root.bind("<Escape>", lambda _evento: self.desarmar())
@@ -384,6 +385,72 @@ class App:
         # numa frase concatenada.
         self.aviso.set("\n\n".join(f"• {aviso}" for aviso in avisos))
 
+    def _verificar_af_em_worker(self, fonte: FonteCamera) -> None:
+        """Prova funcional da trava de foco; só enfileira, sem tocar em Tk."""
+        try:
+            resultado = fonte.aguardar_estabilidade_foco()
+        except Exception as exc:  # noqa: BLE001
+            resultado = {"estavel": False, "conclusivo": False, "motivo": repr(exc)}
+        # A fonte viaja junto: se o operador cancelou e preparou de novo, o
+        # resultado velho não pode ser aplicado à fonte nova.
+        self._resultados.put(
+            {"tipo": "verificacao_af", "resultado": resultado, "fonte": fonte}
+        )
+
+    def _concluir_verificacao_af(self, resultado: dict[str, Any]) -> None:
+        """Decide PRONTO ou ERRO com as duas evidências: flag e estabilidade.
+
+        Bloqueia de verdade apenas a instabilidade comprovada — foco variando
+        invalida qualquer K único para a sessão, e nada na imagem denuncia.
+        Um driver não observável não bloqueia: vira aviso alto, e a sessão
+        registra a limitação em vez de fingir garantia.
+        """
+        fonte = self.fonte
+        if fonte is None or self.estado_atual != EstadoApp.PREPARANDO:
+            return
+
+        trava = (fonte.travas or {}).get("autofocus", {})
+        flag_ok = bool(trava.get("obedecido"))
+
+        if resultado.get("conclusivo") and not resultado.get("estavel"):
+            fonte.parar()
+            self.fonte = None
+            self._verificacao_af = None
+            self._definir_estado(
+                EstadoApp.ERRO,
+                "AUTOFOCO ATIVO: o foco variou durante a verificação "
+                f"({resultado.get('valores_observados')}). Um K único não "
+                "descreve uma sessão com foco variando. Trave o foco no driver "
+                "(utilitário do fabricante) e prepare de novo.",
+            )
+            self.preflight["metrica"].set(
+                "FALHA: foco instável — nenhum quadro desta câmera é utilizável "
+                "contra o K selado até a trava funcionar"
+            )
+            return
+
+        modo = fonte.modo_efetivo
+        confirmacao = (
+            f"foco estável em {resultado.get('valores_observados')} por "
+            f"{resultado.get('n_amostras')} amostras"
+            if resultado.get("conclusivo")
+            else f"estabilidade não conclusiva: {resultado.get('motivo')}"
+        )
+        if not flag_ok or not resultado.get("conclusivo"):
+            avisos = self.aviso.get()
+            extra = (
+                f"• trava de foco sem dupla garantia ({confirmacao}; flag "
+                f"lida {trava.get('lido')}). A sessão registra o foco por "
+                "amostragem; confira o alerta de foco no JSON ao salvar."
+            )
+            self.aviso.set(f"{avisos}\n\n{extra}" if avisos else extra)
+
+        self._definir_estado(
+            EstadoApp.PRONTO,
+            f"Câmera estável no modo {modo['width']}x{modo['height']} @ "
+            f"{modo['fps']:.0f} fps; {confirmacao}. O vídeo cru começa ao ARMAR.",
+        )
+
     def armar(self) -> None:
         fonte = self.fonte
         if fonte is None or self.estado_atual != EstadoApp.PRONTO:
@@ -574,6 +641,8 @@ class App:
         if self.fonte is not None:
             self.fonte.parar()
             self.fonte = None
+        # O worker de verificação, se existir, morre sozinho; o resultado dele
+        # será ignorado porque a fonte não é mais a atual.
         self._definir_estado(EstadoApp.OCIOSO, "Preparação cancelada com segurança.")
 
     # -- preview ----------------------------------------------------------
@@ -593,6 +662,10 @@ class App:
                 self._iniciar_gravacao(
                     resultado["monotonic_ns"], resultado["posicao"]
                 )
+            elif tipo == "verificacao_af":
+                self._verificacao_af = None
+                if resultado["fonte"] is self.fonte:
+                    self._concluir_verificacao_af(resultado["resultado"])
             elif tipo == "salvo":
                 self._worker_ativo = False
                 documento = resultado["documento"]
@@ -633,16 +706,24 @@ class App:
             fonte is not None
             and self.estado_atual == EstadoApp.PREPARANDO
             and fonte.ultimo() is not None
+            and self._verificacao_af is None
         ):
+            # Primeiro quadro chegou. PRONTO só depois da prova funcional da
+            # trava de foco: a flag do driver é declaração, foco constante sob
+            # observação é evidência. Roda em worker; ~3-4 s com a cena real.
             modo = fonte.modo_efetivo
             self.preflight["integridade"].set(
                 f"OK: primeiro quadro {modo['width']}x{modo['height']} recebido"
             )
-            self._definir_estado(
-                EstadoApp.PRONTO,
-                f"Câmera estável no modo {modo['width']}x{modo['height']} @ "
-                f"{modo['fps']:.0f} fps. O vídeo cru começa ao ARMAR.",
+            self.detalhe.set(
+                "Verificando a trava do autofoco (~4 s). Mantenha a cena real "
+                "na frente da câmera: autofoco só caça quando tem o que caçar."
             )
+            self._verificacao_af = threading.Thread(
+                target=self._verificar_af_em_worker, args=(fonte,),
+                name="verificacao_af", daemon=True,
+            )
+            self._verificacao_af.start()
         # Preview a ~15 fps: redesenhar a 60 rouba CPU da captura sem ajudar
         # em nada o operador.
         if fonte is not None and agora - self._ultimo_preview > 0.066:

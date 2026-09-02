@@ -1,6 +1,6 @@
 ---
 kind: handoff
-title: "Handoff do projeto pose — 2026-09-01"
+title: "Handoff do projeto pose — 2026-09-02"
 ---
 
 # Estado
@@ -8,9 +8,13 @@ title: "Handoff do projeto pose — 2026-09-01"
 Pesquisa de mestrado: pose 6DoF visual do transdutor ultrassônico e registro
 espacial 3D de US para inspeção subaquática (END). Delineamento em
 [`delineamento_pesquisa_mestrado.md`](delineamento_pesquisa_mestrado.md).
+Quadro geral consolidado em [`dossie_projeto.md`](dossie_projeto.md) (PDF:
+`build_dossie_pdf.py`).
 
-**Agora:** campanha de vídeo 4K + Multi2000, sync por **clique**, para treinar
-e rastrear o marcador. Refrativa, mão-olho e afirmações em mm ficam para depois.
+**Agora:** campanha de vídeo 4K + Multi2000 conforme o roteiro
+[`roteiro_experimentos.md`](roteiro_experimentos.md) — E0 (aparato) antes de
+qualquer take; sync por clique + batidas + stop-and-go (métodos S1–S3 do
+roteiro). Refrativa, mão-olho e afirmações em mm ficam para depois.
 
 ```mermaid
 flowchart LR
@@ -26,7 +30,7 @@ flowchart LR
 | :--- | :--- |
 | Intrínseca em ar | **fechada** — S600 3840×2160@30 MJPEG, Caliscope 0.11.3, RMSE 0,599 px, 30 quadros |
 | Aparato | câmera no tripé **fora** do tanque; marcador e sonda **na água**; sem *housing* |
-| Aquisição | `aquisicao/gravar.py` — sync `grosseira` (clique). Não é A-scan |
+| Aquisição | `aquisicao/gravar.py` — sync `grosseira` (clique). Não é A-scan. PREPARAR agora só chega a PRONTO com **trava de foco comprovada** (foco instável = ERRO) |
 | Detector fiducial (WP3a) | treinado (P90 < 2 px; 0% de cantos > 5 px) |
 | Baseline ArUco (WP0) | medida em água limpa |
 | Refrativa / mão-olho / GT eletromecânico | **adiados** |
@@ -51,6 +55,18 @@ Smoke primeiro (~20 s). No JSON: `fps_medido` e `descartes`.
 Take `aquisicao/sessoes/20260901_165544_983`: modo 4K abriu, 0 descartes, sync
 `grosseira`, **fps_medido 20,79** (não 30), autofoco pedido 0 / lido 2.
 
+Sobre esses dois números (correções de 2026-09-02):
+
+- **"lido 2" era falso alarme.** No DirectShow o readback é a flag
+  `CameraControl_Flags` (1=auto, **2=manual**); o foco ficou constante em
+  356,0 a sessão toda. O código agora interpreta a flag, fixa o foco absoluto
+  e **prova** a estabilidade antes de PRONTO. Foco de referência selado em
+  `calibracao/perfis_ativos/s600.foco.json` (356,0 — proveniência e assunção
+  declaradas lá dentro).
+- **fps 20,79 segue em aberto** — hipótese: autoexposição alonga o shutter em
+  luz fraca. Medir fps × iluminação (E0.2 do roteiro) antes da campanha; mais
+  luz deve recuperar fps e reduzir blur pela mesma causa.
+
 # Calibração (só o que vale)
 
 Artefatos canônicos:
@@ -74,6 +90,9 @@ Recaptura intrínseca (raro): `calibracao/gravar_ffmpeg_s600.cmd` →
 
 O JSON declara `sincronismo.qualidade.nivel = grosseira`. Serve para casar o
 vídeo com o `.m2k` da mesma varredura. Não autoriza “este quadro = este A-scan”.
+Os upgrades de sincronismo (batidas, stop-and-go, LED no trigger) estão
+ranqueados em [`roteiro_experimentos.md`](roteiro_experimentos.md) §Formas de
+sincronizar.
 
 # Fora do git
 

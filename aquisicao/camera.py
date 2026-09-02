@@ -308,31 +308,140 @@ class FonteCamera:
             leitura[nome] = None if valor in (-1.0, 0.0) and nome == "zoom" else float(valor)
         return leitura
 
+    # Readback do autofoco no DirectShow: o driver devolve a flag
+    # CameraControl_Flags, não o valor pedido. 1 = automático, 2 = manual.
+    # A S600 responde 2.0 a um pedido de 0.0 — isso É obediência, não recusa.
+    # Evidência: sessão 20260901_165544_983 leu 2.0 e o foco ficou constante
+    # em 356.0 por 74 amostras. Comparar o readback com o pedido (0.0) marcava
+    # a trava como falha exatamente quando ela funcionou.
+    _AF_READBACK_MANUAL = frozenset({0.0, 2.0})
+
     def _travar_automatismos(self) -> dict[str, dict[str, Any]]:
         """Pede manual, lê de volta e registra se o driver obedeceu.
 
         Não presume obediência: em várias webcams o readback de autoexposição é
-        -1 (não observável) e o `set` retorna True mesmo sem efeito.
+        -1 (não observável) e o `set` retorna True mesmo sem efeito. Para o
+        autofoco há dois cintos: desligar a flag e, em seguida, fixar o foco
+        absoluto no valor corrente — em vários drivers UVC é o set de foco
+        absoluto que efetivamente muda o modo para manual. A prova final não
+        está aqui: é a estabilidade do foco sob observação
+        (`aguardar_estabilidade_foco`), que gravar.py exige antes de PRONTO.
         """
         cap = self._cap
         assert cap is not None
-        pedidos = {
-            "autofocus": (cv2.CAP_PROP_AUTOFOCUS, 0.0),
-            "auto_exposure": (cv2.CAP_PROP_AUTO_EXPOSURE, 0.25),
-        }
         resultado: dict[str, dict[str, Any]] = {}
-        for nome, (prop, valor) in pedidos.items():
-            retornou = bool(cap.set(prop, valor))
+
+        # -- autofoco: flag + fixação do foco absoluto -----------------------
+        foco_antes = float(cap.get(cv2.CAP_PROP_FOCUS))
+        retornou = bool(cap.set(cv2.CAP_PROP_AUTOFOCUS, 0.0))
+        time.sleep(0.05)
+        lido = float(cap.get(cv2.CAP_PROP_AUTOFOCUS))
+        if lido not in self._AF_READBACK_MANUAL:
+            # Alguns drivers só aceitam o pedido depois do primeiro set falho.
+            retornou = bool(cap.set(cv2.CAP_PROP_AUTOFOCUS, 0.0)) or retornou
             time.sleep(0.05)
-            lido = float(cap.get(prop))
-            resultado[nome] = {
-                "pedido": valor,
-                "set_retornou": retornou,
-                "lido": lido,
-                "obedecido": abs(lido - valor) < 1e-6,
-                "observavel": lido != -1.0,
-            }
+            lido = float(cap.get(cv2.CAP_PROP_AUTOFOCUS))
+
+        foco_fixado: float | None = None
+        if foco_antes >= 0.0:
+            # Fixa o foco absoluto onde ele está. Não muda a geometria (o valor
+            # é o corrente); muda o modo em drivers que ignoram a flag.
+            if bool(cap.set(cv2.CAP_PROP_FOCUS, foco_antes)):
+                time.sleep(0.05)
+                foco_fixado = float(cap.get(cv2.CAP_PROP_FOCUS))
+
+        obedecido = lido in self._AF_READBACK_MANUAL
+        resultado["autofocus"] = {
+            "pedido": 0.0,
+            "set_retornou": retornou,
+            "lido": lido,
+            "obedecido": obedecido,
+            "observavel": lido != -1.0,
+            "interpretacao": (
+                "readback é a flag CameraControl_Flags do DirectShow: "
+                "1=automático, 2=manual; 2.0 conta como trava obedecida"
+            ),
+            "foco_no_momento_da_trava": foco_antes if foco_antes >= 0.0 else None,
+            "foco_fixado_em": foco_fixado,
+        }
+
+        # -- autoexposição: sem interpretação nova, registro honesto ---------
+        retornou = bool(cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25))
+        time.sleep(0.05)
+        lido = float(cap.get(cv2.CAP_PROP_AUTO_EXPOSURE))
+        resultado["auto_exposure"] = {
+            "pedido": 0.25,
+            "set_retornou": retornou,
+            "lido": lido,
+            "obedecido": abs(lido - 0.25) < 1e-6,
+            "observavel": lido != -1.0,
+        }
         return resultado
+
+    def aguardar_estabilidade_foco(
+        self,
+        *,
+        min_amostras: int = 3,
+        timeout_s: float = 8.0,
+    ) -> dict[str, Any]:
+        """Prova funcional da trava de autofoco: foco constante sob observação.
+
+        A flag do driver é declaração; foco que não muda enquanto a cena real
+        está na frente da câmera é evidência. Espera a amostragem periódica de
+        propriedades (1 Hz, feita na thread de captura — nunca toca no
+        VideoCapture daqui) acumular `min_amostras` e responde se o foco variou.
+
+        Bloqueia a thread chamadora; chame de um worker, não da UI. Um foco
+        estável aqui não prova que a flag está em manual — prova que, até
+        agora, nada caçou. Por isso o resultado carrega as duas evidências e a
+        decisão combinada fica com quem chama.
+        """
+        inicio_ns = time.perf_counter_ns()
+        prazo = time.monotonic() + timeout_s
+        while time.monotonic() < prazo:
+            amostras = [
+                a for a in list(self.amostras_props)
+                if a["monotonic_ns"] >= inicio_ns and a.get("focus") is not None
+            ]
+            if len(amostras) >= min_amostras:
+                break
+            time.sleep(0.1)
+        else:
+            amostras = [
+                a for a in list(self.amostras_props)
+                if a["monotonic_ns"] >= inicio_ns and a.get("focus") is not None
+            ]
+
+        valores = sorted({a["focus"] for a in amostras})
+        if valores == [-1.0]:
+            return {
+                "estavel": False,
+                "conclusivo": False,
+                "motivo": (
+                    "o driver devolve -1 para foco: não observável. Não dá para "
+                    "afirmar estabilidade nem instabilidade por leitura de props."
+                ),
+                "valores_observados": valores,
+                "n_amostras": len(amostras),
+            }
+        if len(amostras) < min_amostras:
+            return {
+                "estavel": False,
+                "conclusivo": False,
+                "motivo": (
+                    f"apenas {len(amostras)} amostra(s) de foco em {timeout_s:.0f} s; "
+                    "captura parada ou foco não observável neste driver"
+                ),
+                "valores_observados": valores,
+                "n_amostras": len(amostras),
+            }
+        return {
+            "estavel": len(valores) == 1,
+            "conclusivo": True,
+            "valores_observados": valores,
+            "n_amostras": len(amostras),
+            "janela_s": round((amostras[-1]["monotonic_ns"] - amostras[0]["monotonic_ns"]) / 1e9, 2),
+        }
 
     def _restaurar_automatismos(self) -> None:
         """Devolve a câmera ao automático ao sair.

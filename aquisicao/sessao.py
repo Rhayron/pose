@@ -486,6 +486,31 @@ def salvar_manifesto_incompleto(
     return manifesto
 
 
+def _carregar_foco_referencia(
+    caminho_perfil: Path, camera_key: str
+) -> dict[str, Any] | None:
+    """Lê o sidecar de foco de referência ao lado do perfil selado.
+
+    O perfil ativo é selado por digest: acrescentar um campo nele quebraria o
+    selo. O foco de referência mora num arquivo próprio, não selado, com a
+    proveniência declarada — inclusive quando ela é uma assunção, e não uma
+    leitura feita durante a captura da calibração.
+    """
+    sidecar = caminho_perfil.with_suffix(".foco.json")
+    if not sidecar.exists():
+        return None
+    dados = json.loads(sidecar.read_text(encoding="utf-8"))
+    schema = dados.get("schema", {})
+    if schema.get("name") != "pose.foco_referencia":
+        raise ErroSessao(f"{sidecar} não é um sidecar de foco de referência")
+    if dados.get("camera_key") != camera_key:
+        raise ErroSessao(
+            f"sidecar de foco é da câmera {dados.get('camera_key')!r}, "
+            f"perfil é {camera_key!r}"
+        )
+    return dados
+
+
 def carregar_perfil_para_sessao(caminho: Path | None) -> dict[str, Any] | None:
     """Lê o perfil de calibração e registra o estado da transferência.
 
@@ -506,13 +531,28 @@ def carregar_perfil_para_sessao(caminho: Path | None) -> dict[str, Any] | None:
     from caliscope_import import carregar_perfil_ativo  # noqa: PLC0415
 
     dados = carregar_perfil_ativo(caminho, exigir_transferencia=False)
+
+    # Foco de referência: primeiro o que estiver dentro do perfil selado; na
+    # falta dele, o sidecar. A origem viaja no JSON da sessão.
+    focus_esperado = dados["focus_esperado"]
+    focus_origem = "perfil" if focus_esperado is not None else None
+    focus_proveniencia: dict[str, Any] | None = None
+    if focus_esperado is None:
+        sidecar = _carregar_foco_referencia(caminho, dados["camera_key"])
+        if sidecar is not None:
+            focus_esperado = sidecar.get("focus_esperado")
+            focus_origem = "sidecar"
+            focus_proveniencia = sidecar.get("proveniencia")
+
     return {
         "perfil": str(caminho),
         "camera_key": dados["camera_key"],
         "image_size": dados["image_size"],
         "K": dados["K"],
         "dist": dados["dist"],
-        "focus_esperado": dados["focus_esperado"],
+        "focus_esperado": focus_esperado,
+        "focus_esperado_origem": focus_origem,
+        "focus_esperado_proveniencia": focus_proveniencia,
         "import_id": dados["import_id"],
         "activation_id": dados["activation_id"],
         "transferencia": dados["transferencia"]["status"],
